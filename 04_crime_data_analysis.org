@@ -1,0 +1,72 @@
+#+TITLE: Fourth course: Crime data analysis
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
+
+The goal of this session is to make you understand, clean up and analyze an unknown dataset.
+
+Within the 3 hours, you should be able:
+- to identify which columns in the dataset is the /outcome variable/, the one we wish to predict
+- to predict it with reasonable accuracy using a reasonable selection of the other columns, the /predictors/
+- to have an opinion on the usefulness and applicability of what you did.
+
+* Get the data
+First, download the csv data file fome [[file:crime_data_sample.csv][here]] and save it in a sensible place on your drive.
+
+Then, open a Python notebook, either through =jupyter notebook= or =jupyter lab=, and load the downloaded csv file using [[https://pandas.pydata.org/pandas-docs/stable/getting_started/10min.html][pandas]].
+
+** Forseeable problems
+   -  I'm not able to open a Python Notebook :: Refer to the previous 2 courses. On Windows, search for Anaconda GUI and click on "Jupyter Lab", or launch a command window and type =jupyter lab=. On Mac, type =jupyter lab= in a Terminal.app window. Take notes on how it works on your computer.
+   -  FileNotFound error :: The cleanest solution is to keep your data file and your notebook in the same folder. [[http://www.harperdoit.net/dlo/DLOwebsite/csfiles/WindowsVistaFilesandFoldersTutorial.pdf][Here]] is a handy guide on files and folder for Windows.
+   -  I don't know how to load a file using pandas :: Read the linked "10 minutes to pandas" tutorial, use the search function of your web browser (ctrl-F).
+* Get a feel for the dataset by looking at each column in isolation
+  For each column in the dataset:
+  - roughly translate the header in english
+  - extract the list of possible values each column can take
+  - translate the possible values, get a feel for what they mean
+  - understand the type of variable you are dealing with:
+    - discrete
+    - continuous
+    - categorical
+  - for the 4 to 10 columns you deem the most interesting, use the appropriate type of graph to draw their distribution
+
+    
+  Identify the /outcome variable/ and select a reasonable set of /predictor variables/
+** Hints
+   - https://docs.python.org/3/tutorial/datastructures.html
+   - https://towardsdatascience.com/data-types-in-statistics-347e152e8bee
+   - https://seaborn.pydata.org/tutorial/distributions.html
+   - https://seaborn.pydata.org/tutorial/categorical.html
+   - https://seaborn.pydata.org/generated/seaborn.countplot.html
+   - https://seaborn.pydata.org/generated/seaborn.distplot.html
+* Understand what tidy data looks like
+  Skim the [[https://www.jstatsoft.org/index.php/jss/article/view/v059i10/v59i10.pdf]["Tidy Data" paper]], look mainly at the examples.
+
+  Look at the provided crime data sample file.
+
+  What are the most "untidy" columns ?
+
+  What can you do to make them tidy ?
+
+  Do it.
+
+  Restrict your dataset to the outcome variable and the tidied up reasonable set of predictors.
+
+** Hints
+  - Two different columns sharing a possible value is the smell of untidyness
+  - https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html
+* Look for binary relationships in the dataset
+  The columns are not independent. Look for the strongest relationships in the dataset.
+
+  If two predictors are very closely linked, what should you do, or at least what should you be mindful of ?
+
+  Do you see any strong link between a predictor and the outcome variable ?
+** Hints
+   - https://seaborn.pydata.org/tutorial/distributions.html#visualizing-pairwise-relationships-in-a-dataset
+* Try to predict the outcome variable
+  Before you begin, make a convincing business case for the implementation of such a predicting machine (5 lines). Identify the major possible benefits and at least one possible risk.
+
+  How would you feel as a citizen if this predicting machine was actually being put in use ?
+
+  Now, try to predict the outcome variable from your reasonable set of predictors. Your reasonable set of predictors ought to make sense with respect to your business case.
+** Hints
+   - https://scikit-learn.org/stable/tutorial/machine_learning_map/index.html
+
