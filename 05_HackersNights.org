@@ -1,0 +1,85 @@
+#+TITLE: Project: Interactive Data Analysis
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
+
+You have less than 12 hours to:
+- find a dataset
+- create an interactive analysis or experience with it
+- present it to your peers
+
+* Finding the dataset
+  You need to find a dataset that is:
+  - tidy (unless you want to waste precious time tidying it)
+  - interesting (at least to you)
+  - in a format that you will be able to load into pandas
+
+
+  If you want to find a dataset about X, you should google keywords like:
+  - X dataset
+  - X datadump
+  - X database
+  - X open data
+  - X csv data
+  - X machine learning training
+
+
+  You can also visit the following websites to find some examples of what I'm talking about:
+  - https://www.imdb.com/interfaces/
+  - https://research.spotify.com/datasets
+  - https://web.archive.org/web/20090925184737/http://archive.ics.uci.edu/ml/datasets/Netflix+Prize
+  - https://www.kaggle.com/datasets
+  - https://www.data.gouv.fr/fr/
+
+
+  Your choice of a dataset will be instrumental in your failure or your success, but you need to spend more time analysing the data than finding it, so proceed with both haste and caution.
+
+  If you are unsure, please come and see me to see what advice I have to give about your choice of a dataset.
+* Basic analysis of the dataset
+  You will get a B if you can reproduce what we did with the titanic data and the crime data, namely:
+  - load the dataset in a notebook using pandas
+  - Make sure it is tidy, or tidy it up yourself
+  - Using convincing graphs (hint, use Seaborn), quantitavely confirm an expected relationship between two columns (or even better, find an unexpected one).
+* Advanced analysis of the dataset
+  Before you try anything fancy, you must first do a basic analysis. Once you are there, there are multiple ways you can go fancy. Pick one, do it thoroughly and only then pick another:
+  - Make your analysis interactive using either:
+    - interact https://ipywidgets.readthedocs.io/en/latest/examples/Using%20Interact.html
+    - streamlit https://streamlit.io/
+  - Try to learn to predict one outcome column from one or more predictor columns (see https://scikit-learn.org/stable/tutorial/machine_learning_map/index.html)
+  - Create an unusual visualization that is not just a call to seaborn.
+* Presenting to your peers
+  During the second and last hacker's night, you will have two minutes to show your work to your peers.
+
+  Before the clock hits 19:00, you shall upload your notebook and dataset on my server. To do so, copy paste the following as the second to last cell:
+  #+begin_src python
+  %%javascript
+  Ipython.notebook.kernel.execute(`notebookName = '${Ipython.notebook.notebook_name}'`);
+  #+end_src
+  If you get an error running this cell, try the following:
+  #+begin_src python
+  %%javascript
+  Jupyter.notebook.kernel.execute(`notebookName = '${Jupyter.notebook.notebook_name}'`);
+  #+end_src
+
+  And then copy paste the following as the last cell of your notebook:
+  #+begin_src python
+    import requests
+    filenames = [notebookName, 'YOURDATASETNAME.csv']  # FIXME
+    student_id = 'B00XXXXX' # FIXME
+    first_name = 'John'  # FIXME
+    last_name = 'Doe'  # FIXME
+    hostname_port = 'http://oneclick.rdklein.fr:5564'
+    for f in filenames:
+        r = requests.put(f'{hostname_port}/upload/{student_id}_{first_name}_{last_name}/{f}',
+                         data=open(f, 'r').read().encode('utf-8'))
+        assert r.status_code == 200, f"Server unhappy because of {r.content}"
+        print(r.content)
+  #+end_src
+  Edit all the lines that bear a =FIXME= comment so that they reflect your information, and run the last two cells. This will upload your files, and you will be able to
+  show them to everybody using my laptop.  
+
+  Please bear in mind that two minutes times a lot of students is a lot of time. You won't have the whole 12 hours to finish your project. Go straight to the point and go fast.
+
+  Jupyter Notebooks have a "slide" mode, which can be helpful https://medium.com/learning-machine-learning/present-your-data-science-projects-with-jupyter-slides-75f20735eb0f
+
+  The 2 minutes will be a hard limit. Be very mindful of it and aim for 1m30s instead.
+
+

@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-11-06 mer. 16:06 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fourth course: Crime data analysis</title>
+<meta name="generator" content="Org mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Fourth course: Crime data analysis</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgc839b30">1. Get the data [10 min]</a>
+<ul>
+<li><a href="#org6418a92">1.1. Forseeable problems</a></li>
+</ul>
+</li>
+<li><a href="#org288b6ad">2. Get a feel for the dataset by looking at each column in isolation [1 h]</a>
+<ul>
+<li><a href="#org03bae9e">2.1. Hints</a></li>
+</ul>
+</li>
+<li><a href="#org453b57b">3. Understand what tidy data looks like [1 h]</a>
+<ul>
+<li><a href="#org1eb2103">3.1. Hints</a></li>
+</ul>
+</li>
+<li><a href="#orgea3b12d">4. Look for binary relationships in the dataset [20 min]</a>
+<ul>
+<li><a href="#orgb89fc1c">4.1. Hints</a></li>
+</ul>
+</li>
+<li><a href="#org8dcb0e8">5. Try to predict the outcome variable [Homework]</a>
+<ul>
+<li><a href="#orgab77492">5.1. Hints</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+The goal of this session is to make you understand, clean up and analyze an unknown dataset.
+</p>
+
+<p>
+Within the 3 hours, you should be able:
+</p>
+<ul class="org-ul">
+<li>to identify which columns in the dataset is the <i>outcome variable</i>, the one we wish to predict</li>
+<li>to predict it with reasonable accuracy using a reasonable selection of the other columns, the <i>predictors</i></li>
+<li>to have an opinion on the usefulness and applicability of what you did.</li>
+</ul>
+
+<div id="outline-container-orgc839b30" class="outline-2">
+<h2 id="orgc839b30"><span class="section-number-2">1</span> Get the data [10 min]</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+First, download the csv data file fome <a href="crime_data_sample.csv">here</a> and save it in a sensible place on your drive.
+</p>
+
+<p>
+Then, open a Python notebook, either through <code>jupyter notebook</code> or <code>jupyter lab</code>, and load the downloaded csv file using <a href="https://pandas.pydata.org/pandas-docs/stable/getting_started/10min.html">pandas</a>.
+</p>
+
+<p>
+So far, this is the same thing we did last session.
+</p>
+</div>
+<div id="outline-container-org6418a92" class="outline-3">
+<h3 id="org6418a92"><span class="section-number-3">1.1</span> Forseeable problems</h3>
+<div class="outline-text-3" id="text-1-1">
+<dl class="org-dl">
+<dt>I'm not able to open a Python Notebook</dt><dd>Refer to the previous 2 courses. On Windows, search for Anaconda GUI and click on "Jupyter Lab", or launch a command window and type <code>jupyter lab</code>. On Mac, type <code>jupyter lab</code> in a Terminal.app window. Take notes on how it works on your computer.</dd>
+<dt>FileNotFound error</dt><dd>The cleanest solution is to keep your data file and your notebook in the same folder.
+<ul class="org-ul">
+<li><a href="http://www.harperdoit.net/dlo/DLOwebsite/csfiles/WindowsVistaFilesandFoldersTutorial.pdf">Here</a> is a handy guide on files and folder for Windows ;</li>
+<li><a href="https://support.apple.com/guide/mac-help/organize-files-using-folders-mh26885/mac">here</a> and <a href="https://support.apple.com/guide/mac-help/finder-mchlp2605/mac">here</a> are two guides for mac users.</li>
+</ul></dd>
+<dt>I don't know how to load a file using pandas</dt><dd>Read the linked "10 minutes to pandas" tutorial, use the search function of your web browser (ctrl-F) to look for something related to "csv".</dd>
+</dl>
+</div>
+</div>
+</div>
+<div id="outline-container-org288b6ad" class="outline-2">
+<h2 id="org288b6ad"><span class="section-number-2">2</span> Get a feel for the dataset by looking at each column in isolation [1 h]</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+For each column in the dataset:
+</p>
+<ul class="org-ul">
+<li>roughly manually translate the header in english. Don't sweat it, this is just to get a vague understanding of what the data is about. [2 min]</li>
+<li>In a notebook cell, write a snippet to show the list of possible values each column can take [30 min].</li>
+<li>roughly manually translate the possible values of the columns that seem the most interesting, get a feel for what they roughly mean. [5 min]</li>
+<li>understand, for the most important columns, the type of variable you are dealing with: [10 min]
+<ul class="org-ul">
+<li>discrete</li>
+<li>continuous</li>
+<li>categorical</li>
+</ul></li>
+<li>for the 4 to 10 columns you deem the most interesting, use the appropriate type of graph to draw their distribution. [10 min]</li>
+</ul>
+
+
+<p>
+Identify the <i>outcome variable</i> and select a reasonable set of <i>predictor variables</i>. [3 min]
+</p>
+</div>
+<div id="outline-container-org03bae9e" class="outline-3">
+<h3 id="org03bae9e"><span class="section-number-3">2.1</span> Hints</h3>
+<div class="outline-text-3" id="text-2-1">
+<ul class="org-ul">
+<li><a href="https://docs.python.org/3/tutorial/datastructures.html">https://docs.python.org/3/tutorial/datastructures.html</a></li>
+<li><a href="https://towardsdatascience.com/data-types-in-statistics-347e152e8bee">https://towardsdatascience.com/data-types-in-statistics-347e152e8bee</a></li>
+<li><a href="https://seaborn.pydata.org/tutorial/distributions.html">https://seaborn.pydata.org/tutorial/distributions.html</a></li>
+<li><a href="https://seaborn.pydata.org/tutorial/categorical.html">https://seaborn.pydata.org/tutorial/categorical.html</a></li>
+<li><a href="https://seaborn.pydata.org/generated/seaborn.countplot.html">https://seaborn.pydata.org/generated/seaborn.countplot.html</a></li>
+<li><a href="https://seaborn.pydata.org/generated/seaborn.distplot.html">https://seaborn.pydata.org/generated/seaborn.distplot.html</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org453b57b" class="outline-2">
+<h2 id="org453b57b"><span class="section-number-2">3</span> Understand what tidy data looks like [1 h]</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Skim the <a href="https://www.jstatsoft.org/index.php/jss/article/view/v059i10/v59i10.pdf">"Tidy Data" paper</a>, look mainly at the examples. [5 min]
+</p>
+
+<p>
+Look at the provided crime data sample file.
+</p>
+
+<p>
+What are the most "untidy" columns ? [5 min]
+</p>
+
+<p>
+What can you do to make them tidy ?
+</p>
+
+<p>
+Do it. [40 min]
+</p>
+
+<p>
+Restrict your dataset to the outcome variable and the tidied up reasonable set of predictors. [10 min]
+</p>
+</div>
+
+<div id="outline-container-org1eb2103" class="outline-3">
+<h3 id="org1eb2103"><span class="section-number-3">3.1</span> Hints</h3>
+<div class="outline-text-3" id="text-3-1">
+<ul class="org-ul">
+<li>Two different columns sharing a possible value is the smell of untidyness</li>
+<li><a href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html">https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-orgea3b12d" class="outline-2">
+<h2 id="orgea3b12d"><span class="section-number-2">4</span> Look for binary relationships in the dataset [20 min]</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+The columns are not independent. Look for the strongest relationships in the dataset.
+</p>
+
+<p>
+If two predictors are very closely linked, what should you do, or at least what should you be mindful of ?
+</p>
+
+<p>
+Do you see any strong link between a predictor and the outcome variable ?
+</p>
+</div>
+<div id="outline-container-orgb89fc1c" class="outline-3">
+<h3 id="orgb89fc1c"><span class="section-number-3">4.1</span> Hints</h3>
+<div class="outline-text-3" id="text-4-1">
+<ul class="org-ul">
+<li><a href="https://seaborn.pydata.org/tutorial/distributions.html#visualizing-pairwise-relationships-in-a-dataset">https://seaborn.pydata.org/tutorial/distributions.html#visualizing-pairwise-relationships-in-a-dataset</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org8dcb0e8" class="outline-2">
+<h2 id="org8dcb0e8"><span class="section-number-2">5</span> Try to predict the outcome variable [Homework]</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+Before you begin, make a convincing business case for the implementation of such a predicting machine (5 lines). Identify the major possible benefits and at least one possible risk.
+</p>
+
+<p>
+How would you feel as a citizen if this predicting machine was actually being put in use ?
+</p>
+
+<p>
+Now, try to predict the outcome variable from your reasonable set of predictors. Your reasonable set of predictors ought to make sense with respect to your business case.
+</p>
+</div>
+<div id="outline-container-orgab77492" class="outline-3">
+<h3 id="orgab77492"><span class="section-number-3">5.1</span> Hints</h3>
+<div class="outline-text-3" id="text-5-1">
+<ul class="org-ul">
+<li><a href="https://scikit-learn.org/stable/tutorial/machine_learning_map/index.html">https://scikit-learn.org/stable/tutorial/machine_learning_map/index.html</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2019-11-06 mer. 16:06</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

@@ -8,28 +8,31 @@ Within the 3 hours, you should be able:
 - to predict it with reasonable accuracy using a reasonable selection of the other columns, the /predictors/
 - to have an opinion on the usefulness and applicability of what you did.
 
-* Get the data
+* Get the data [10 min]
 First, download the csv data file fome [[file:crime_data_sample.csv][here]] and save it in a sensible place on your drive.
 
 Then, open a Python notebook, either through =jupyter notebook= or =jupyter lab=, and load the downloaded csv file using [[https://pandas.pydata.org/pandas-docs/stable/getting_started/10min.html][pandas]].
 
+So far, this is the same thing we did last session.
 ** Forseeable problems
-   -  I'm not able to open a Python Notebook :: Refer to the previous 2 courses. On Windows, search for Anaconda GUI and click on "Jupyter Lab", or launch a command window and type =jupyter lab=. On Mac, type =jupyter lab= in a Terminal.app window. Take notes on how it works on your computer.
-   -  FileNotFound error :: The cleanest solution is to keep your data file and your notebook in the same folder. [[http://www.harperdoit.net/dlo/DLOwebsite/csfiles/WindowsVistaFilesandFoldersTutorial.pdf][Here]] is a handy guide on files and folder for Windows.
-   -  I don't know how to load a file using pandas :: Read the linked "10 minutes to pandas" tutorial, use the search function of your web browser (ctrl-F).
-* Get a feel for the dataset by looking at each column in isolation
+   - I'm not able to open a Python Notebook :: Refer to the previous 2 courses. On Windows, search for Anaconda GUI and click on "Jupyter Lab", or launch a command window and type =jupyter lab=. On Mac, type =jupyter lab= in a Terminal.app window. Take notes on how it works on your computer.
+   - FileNotFound error :: The cleanest solution is to keep your data file and your notebook in the same folder.
+     - [[http://www.harperdoit.net/dlo/DLOwebsite/csfiles/WindowsVistaFilesandFoldersTutorial.pdf][Here]] is a handy guide on files and folder for Windows ;
+     - [[https://support.apple.com/guide/mac-help/organize-files-using-folders-mh26885/mac][here]] and [[https://support.apple.com/guide/mac-help/finder-mchlp2605/mac][here]] are two guides for mac users.
+   - I don't know how to load a file using pandas :: Read the linked "10 minutes to pandas" tutorial, use the search function of your web browser (ctrl-F) to look for something related to "csv".
+* Get a feel for the dataset by looking at each column in isolation [1 h]
   For each column in the dataset:
-  - roughly translate the header in english
-  - extract the list of possible values each column can take
-  - translate the possible values, get a feel for what they mean
-  - understand the type of variable you are dealing with:
+  - roughly manually translate the header in english. Don't sweat it, this is just to get a vague understanding of what the data is about. [2 min]
+  - In a notebook cell, write a snippet to show the list of possible values each column can take [30 min].
+  - roughly manually translate the possible values of the columns that seem the most interesting, get a feel for what they roughly mean. [5 min]
+  - understand, for the most important columns, the type of variable you are dealing with: [10 min]
     - discrete
     - continuous
     - categorical
-  - for the 4 to 10 columns you deem the most interesting, use the appropriate type of graph to draw their distribution
+  - for the 4 to 10 columns you deem the most interesting, use the appropriate type of graph to draw their distribution. [10 min]
 
     
-  Identify the /outcome variable/ and select a reasonable set of /predictor variables/
+  Identify the /outcome variable/ and select a reasonable set of /predictor variables/. [3 min]
 ** Hints
    - https://docs.python.org/3/tutorial/datastructures.html
    - https://towardsdatascience.com/data-types-in-statistics-347e152e8bee
@@ -37,23 +40,23 @@ Then, open a Python notebook, either through =jupyter notebook= or =jupyter lab=
    - https://seaborn.pydata.org/tutorial/categorical.html
    - https://seaborn.pydata.org/generated/seaborn.countplot.html
    - https://seaborn.pydata.org/generated/seaborn.distplot.html
-* Understand what tidy data looks like
-  Skim the [[https://www.jstatsoft.org/index.php/jss/article/view/v059i10/v59i10.pdf]["Tidy Data" paper]], look mainly at the examples.
+* Understand what tidy data looks like [1 h]
+  Skim the [[https://www.jstatsoft.org/index.php/jss/article/view/v059i10/v59i10.pdf]["Tidy Data" paper]], look mainly at the examples. [5 min]
 
   Look at the provided crime data sample file.
 
-  What are the most "untidy" columns ?
+  What are the most "untidy" columns ? [5 min]
 
   What can you do to make them tidy ?
 
-  Do it.
+  Do it. [40 min]
 
-  Restrict your dataset to the outcome variable and the tidied up reasonable set of predictors.
+  Restrict your dataset to the outcome variable and the tidied up reasonable set of predictors. [10 min]
 
 ** Hints
   - Two different columns sharing a possible value is the smell of untidyness
   - https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html
-* Look for binary relationships in the dataset
+* Look for binary relationships in the dataset [20 min]
   The columns are not independent. Look for the strongest relationships in the dataset.
 
   If two predictors are very closely linked, what should you do, or at least what should you be mindful of ?
@@ -61,7 +64,7 @@ Then, open a Python notebook, either through =jupyter notebook= or =jupyter lab=
   Do you see any strong link between a predictor and the outcome variable ?
 ** Hints
    - https://seaborn.pydata.org/tutorial/distributions.html#visualizing-pairwise-relationships-in-a-dataset
-* Try to predict the outcome variable
+* Try to predict the outcome variable [Homework]
   Before you begin, make a convincing business case for the implementation of such a predicting machine (5 lines). Identify the major possible benefits and at least one possible risk.
 
   How would you feel as a citizen if this predicting machine was actually being put in use ?

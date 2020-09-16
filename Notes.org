@@ -1,0 +1,72 @@
+* Tidy data
+ - Row/Columns => Sample/Variable
+ - Data types
+   - Categorical
+   - Discrete
+   - Continuous
+
+
+ Discerner une corrélation, afin d'en expliquer la cause ou de prédire de futures valeurs.
+
+ Corrélation != causation.
+
+ Prédiction => causation.
+
+ https://en.wikipedia.org/wiki/Confusion_matrix
+
+ Exercice stats du crime
+* Satistical inference
+** Définition probas:
+   $$\frac{#positive}{#possible}$$
+** Théorème de Bayes
+   Faire la démo avec le Venn
+** Hypothesis testing
+   NHST
+   Définir comme p(data|Hypothèse)
+   Exemple de la pièce
+   https://lindeloev.github.io/tests-as-linear/
+   http://www.stat.rice.edu/~dobelman/courses/texts/leemis.distributions.2008amstat.pdf
+   https://xkcd.com/882/
+   https://msu.edu/~levinet/NHST1.pdf
+
+   #+begin_quote
+As an apparentlynoncontroversial body of statistical knowledge, the hybrid theory has survived allattacks since its inception in the 1940s (p. 108). Its dominance permitsthe suppression of the hard questions (p. 108). What is most remarkable isthe confidence within each social-science discipline that the standards of scientificdemonstration have now been objectively and universally defined (p. 108)
+
+   https://msu.edu/~levinet/NHST1.pdf
+   #+end_quote
+
+
+   Critiques:
+   Marche quand sample size grande => Ignore grands effets, petite étude, facilite petits effets grandes études
+   Ne teste que H, exactement, or H est toujours fausse (à la précision près): donc une étude de grande taille la rejettera toujours (grande taille petits effets).
+   
+
+   https://stamilarity.readthedocs.io/en/latest/
+
+** Bayesian inference
+   Base rate fallacy
+   cite: The base-rate fallacy in probability judgments
+   Exemple: 85% bleus, 15% verts. Témoin dit vert, il a raison 80% du temps.
+   Déduire probabilité que le taxi ait été vert.
+
+   P(témoin dit vert|taxi est bleu): 20%
+   P(taxi est bleu|témoin dit vert): ??
+* Machine Learning
+  Expliquer Y=F(X)
+  Linear models FTW
+  Y = AX+B
+  Possibilité de prétraitement et de rester linéaire
+  Y = APhi(X)+B
+  Mentionner que tous les tests statistiques sont des modèles linéaires
+  
+  Classification
+  Régression
+  Clustering
+  Dimensionality reduction
+  Renforcement
+  Self-supervised
+  
+** Scikit
+   https://scikit-learn.org/stable/tutorial/machine_learning_map/index.html
+   https://distill.pub/2016/misread-tsne/
+   Seaborn gallery
