@@ -1,0 +1,18 @@
+{% extends "layouts/default.html" %}
+{% block title %}ESSEC's Python 101 Exam 2020 Groups C1 & C2{% endblock %}
+{% block content %}
+<div id="main">
+    <h1>Python 101 Exam for groups C1 & C2</h1>
+    <p>Your current grade is <strong>F</strong></p>
+    <p>Please login to access the exam.</p>
+    <p>As an anti-cheat measure, you can only login once.</p>
+    <p>&#9888; <strong>DO NOT CLOSE THE PAGE AFTER YOU LOGIN OR YOU WILL LOSE ACCESS TO THE EXAM</strong></p>
+    <form action="/" method="post">
+  <input type="text" name="name" placeholder="Your full name e.g. Karl Marx" />
+  <input type="text" name="id" placeholder="Your student ID e.g. B1234567" />
+  <input name="token" type="hidden" value="{{ token }}">
+  <input type="submit" value="Login" />
+</form>
+</div>
+
+{% endblock %}

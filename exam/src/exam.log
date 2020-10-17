@@ -1,0 +1,23 @@
+2020-10-16 16:09:55 [INFO ] <INIT>: Creating a state machine with token CE1F5E20-7205-476B-AD8C-D6926F47C67E
+2020-10-16 16:10:56 [INFO ] <INIT>: Creating a state machine with token 5896253A-C477-478C-A28A-7DC38FBAA222
+2020-10-16 16:10:56 [INFO ] <INIT>: Creating a state machine with token CD45E404-DF73-4817-A48E-03114B511334
+2020-10-16 16:10:56 [INFO ] <INIT>: Creating a state machine with token 119E133C-392A-4027-A49E-00AF87A00A1B
+2020-10-16 16:10:59 [INFO ] <INIT>: Creating a state machine with token B81579AB-A8BD-4B27-B905-3820D578F933
+2020-10-16 16:13:36 [INFO ] <INIT>: Creating a state machine with token EAA068D7-D4D2-4078-90C7-7FA1AA4D6DE8
+2020-10-16 16:14:01 [INFO ] <INIT>: Creating a state machine with token 4176B738-2DB9-4627-B9DF-DDB92E140D7F
+2020-10-16 16:14:05 [INFO ] <INIT>: Creating a state machine with token 462CD611-0C5C-4B98-BB39-B8B95016FCE3
+2020-10-16 16:14:06 [INFO ] <INIT>: Creating a state machine with token 44424CDD-306B-4DCF-A316-E9B4E87422E2
+2020-10-16 16:14:07 [INFO ] <INIT>: Creating a state machine with token 9350E387-F9ED-43E2-9A8D-56FBD94B8A01
+2020-10-16 16:14:08 [INFO ] <INIT>: Creating a state machine with token 626D88F4-4BFF-421A-B26F-2375EBC7941C
+2020-10-17 08:39:04 [INFO ] <INIT>: token:toto creation
+2020-10-17 08:39:04 [INFO ] <INIT>: token:toto creation
+2020-10-17 08:39:04 [INFO ] <INIT>: token:toto creation
+2020-10-17 09:57:42 [ERROR] <RENDER>: Invalid state NIL
+2020-10-17 10:03:30 [ERROR] <ROUTES>: Error when POST to / Level must be one of (TRACE DEBUG INFO WARN ERROR SEVERE
+                                           FATAL)
+2020-10-17 10:03:55 [WARN ] <LOGIN>: Invalid login (already logged in) :existing-token CB3147C4-0030-482B-9D9F-DE485308B498 :token 611446FA-B575-42EB-8896-9C243BD0D71D :name James Bond :id B007
+2020-10-17 10:03:55 [ERROR] <ROUTES>: Error when POST to / Invalid login (already logged in) :existing-token CB3147C4-0030-482B-9D9F-DE485308B498 :token 611446FA-B575-42EB-8896-9C243BD0D71D :name James Bond :id B007
+2020-10-17 10:05:06 [ERROR] <ROUTES>: Error when POST to / odd number of &KEY arguments
+2020-10-17 10:11:27 [WARN ] <LOGIN>: Invalid login (already logged in) :existing-token 611446FA-B575-42EB-8896-9C243BD0D71D :token 611446FA-B575-42EB-8896-9C243BD0D71D :name James Bond :id B007
+2020-10-17 10:11:27 [ERROR] <ROUTES>: Error when POST to / Invalid login (already logged in) :existing-token 611446FA-B575-42EB-8896-9C243BD0D71D :token 611446FA-B575-42EB-8896-9C243BD0D71D :name James Bond :id B007
+2020-10-17 10:12:17 [INFO ] <LOGIN>: Successful login for :token 611446FA-B575-42EB-8896-9C243BD0D71D :name Jane doe :id B008
