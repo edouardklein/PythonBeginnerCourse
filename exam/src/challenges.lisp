@@ -4,7 +4,7 @@
         :cl-csv
         :access
    )
-  (:export :collatz :icecream :exam-training-bandit
+  (:export :collatz :icecream :exam-training-bandit :bandit
    :exam-bandit :pull-arm :cheat-arm :bandit-hleft :bandit->csv
    :bandit-benchmark :bandit-reward))
 (in-package :exam.challenges)
@@ -200,7 +200,13 @@ All fonctions are niladic except for the 'Net income' header which needs to know
   "Return a hand-crafted bandit that serves the purpose of the exam well"
   (benchmark
    (make-bandit
-    :probs '(.1 .2 .9)
+    :probs (random-choice '(
+                            (.1 .2 .9)
+                            (.1 .9 .2)
+                            (.2 .1 .9)
+                            (.2 .9 .1)
+                            (.9 .1 .2)
+                            (.9 .2 .1)))
     :data (loop repeat 3 collect '())
     :hleft h
     :benchmark 0
@@ -210,7 +216,13 @@ All fonctions are niladic except for the 'Net income' header which needs to know
   "Return a hand-crafted bandit that serves the purpose of the exam well"
   (benchmark
    (make-bandit
-    :probs '(.1 .2 .3 .4 .9)
+    :probs (random-choice '(
+                            (.1 .2 .3 .4 .9)
+                            (.1 .2 .3 .9 .4)
+                            (.1 .2 .9 .4 .3)
+                            (.1 .9 .3 .4 .2)
+                            (.9 .2 .3 .4 .1)
+                            ))
     :data (loop repeat 5 collect '())
     :hleft h
     :benchmark 0
