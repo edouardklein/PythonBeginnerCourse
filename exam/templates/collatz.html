@@ -4,11 +4,23 @@
 <div id="main">
     <h1>Python 101 Exam for groups C1 & C2, Challenge 0</h1>
     <p>Your current grade is <strong>{{ grade }}</strong></p>
-    <form action="/" method="post">
+    {% if message %}
+    <p>{{ message }}</p>
+    {% endif %}
+    <p>Take n={{ challenge }}</p>
+    <p>Repeatedly apply the following transformation until you arrive at n==1</p>
+    <ul>
+        <li>If n is even, divide by 2</li>
+        <li>If n is odd, multiply n by 3 and then add 1</li>
+    </ul>
+    <p>What is the maximum number you've reached in the process ?</p>
+    <form action="/collatz" method="post">
         <input type="text" name="answer" placeholder="The answer, e.g. 42" />
         <input name="token" type="hidden" value="{{ token }}">
         <input type="submit" value="Submit" />
     </form>
+    <p>For example, starting at n==5, the sequence is 5, 16, 8, 4, 2, 1, and the answer is therefore 16.</p>
+    <p>P.S. If you ever find a number for which you don't end up at 1, please alert the nearest mathematician, you have just solved an open problem in mathematics.</p>
 </div>
 
 {% endblock %}

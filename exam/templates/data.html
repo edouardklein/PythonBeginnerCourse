@@ -1,0 +1,22 @@
+{% extends "layouts/default.html" %}
+{% block title %}ESSEC's Python 101 Exam 2020 Challenge 1{% endblock %}
+{% block content %}
+<div id="main">
+    <h1>Python 101 Exam for groups C1 & C2, Challenge 1</h1>
+    <p>Your current grade is <strong>{{ grade }}</strong></p>
+    {% if message %}
+    <p>{{ message }}</p>
+    {% endif %}
+    <p>You are given the following data in CSV format. These are statistics about a fleet of ice cream trucks.</p>
+    <p>The last line reflects the characteristics of a proposed new route for one of the trucks.</p>
+    <p>Your task is to predict the net income of the proposed new route with 5% accuracy</p>
+    <p>According to the given data, the net income for the proposed new route will be:</p>
+    <form action="/data" method="post">
+        <input type="text" name="answer" placeholder="The answer, e.g. 42" />
+        <input name="token" type="hidden" value="{{ token }}">
+        <input type="submit" value="Submit" />
+    </form>
+    <pre>{{ challenge }}</pre>
+</div>
+
+{% endblock %}

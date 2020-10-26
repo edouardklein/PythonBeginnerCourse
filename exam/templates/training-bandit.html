@@ -1,0 +1,41 @@
+{% extends "layouts/default.html" %}
+{% block title %}ESSEC's Python 101 Exam 2020 Challenge 2{% endblock %}
+{% block content %}
+<div id="main">
+    <h1>Python 101 Exam for groups C1 & C2, Challenge 2</h1>
+    <p>Your current grade is <strong>{{ grade }}</strong></p>
+    {% if message %}
+    <p>{{ message|safe|escape }}</p>
+    {% endif %}
+    <h2>Case study</h2>
+       <p>In the company you work for, three persons are convincingly arguing that their sales pitch is the best and should be the one being given to new sales leads.</p>
+    <p>Knowing that you passed your Python exam, the CEO asks YOU to use a data-driven approach and maximize the number of sales lead that can be transformed into customers.</p>
+    <p>You are given 30 sales lead</p>
+    <p>You can choose which sales pitch (0, 1 or 2) will be given to the next sales lead.</p>
+    <p>After each choice the result will be given to you, and all past results will be made available as a csv string below.</p>
+    <p>To help you, the CTO tells you that this kind of problem is called a <i>Multi-armed bandit</i>. She suggests that you look up some simple yet adequate strategies online.</p>
+    <p>Which sales pitch are you going to show to lead number {{ lead-nb }} ?
+    <form action="/training-bandit" method="post">
+        <input name="token" type="hidden" value="{{ token }}">
+        <input type="submit" name="arm" value="0" />
+        <input type="submit" name="arm" value="1" />
+        <input type="submit" name="arm" value="2" />
+    </form>
+    <p>The data available so far is:</p>
+    <pre>{{ csv }}</pre>
+    <h2>Meta information</h2>
+    <p>You can use this page as many times as you want in order to devise and test a strategy.</p>
+    <p>Each time you run out of sales leads, you will be given information about your performance.</p>
+    <p>For the values I have chosen for this particular instance of the multi armed bandit, know that any non-stupid strategy can somewhat reliably get to 80% or more of the expected performance of an oracle. An oracle is a magical being who knows which sales pitch is the actual best and always chooses that one.</p>
+    <p>Also know that the worst case of any strategy is abysmally bad, and that there are no known simple solution to this problem. Try any strategy of yours multiple times and average your results.</p>
+    <p>Once you are confident that you have devised a reliable strategy, go on to the real challenge (you won't be able to come back to this training area).</p>
+    <p>On the real challenge you will be given three chances to apply your strategy. Your grade will be the best of the three trials.</p>
+    <p>In real life, you would only get one shot, and you would have no way to know whether you strategy actually works, but I give you three trials so that the probability of any of you hitting the worst case is vanishingly small. Also, I've tweaked the probabilities in your favor :)</p>
+    <h2>Ready for the real deal ?</h2>
+    <form action="/training-bandit" method="post">
+        <input name="token" type="hidden" value="{{ token }}">
+        <input type="submit" name="arm" value="Go" />
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "layouts/default.html" %}
+{% block title %}ESSEC's Python 101 Exam 2020 Challenge 2{% endblock %}
+{% block content %}
+<div id="main">
+    <h1>Python 101 Exam for groups C1 & C2, Challenge 2</h1>
+    <p>Your current grade is <strong>{{ grade }}</strong></p>
+    {% if message %}
+    <p>{{ message|safe|escape }}</p>
+    {% endif %}
+    <h2>Case study</h2>
+    <p>By the time you have prepared your strategy to evaluate the sales pitch, two more people came up with a sales pitch of their own.</p>
+    <p>You now have to choose between 5 sales pitch.</p>
+    <p>The sales team managed to find 20 additionnal sales lead for you to try the pitches on</p>
+    <h2>Meta information</h2>
+    <p>This is your trial {{ nbtrial }} out of 3.</p>
+    <p>To get a B or better you should get at least {{ benchmark }} sales lead to become customers.</p>
+    <p>Your grade can not go down, only the best trial out of your three will be taken into account.</p>
+    <p>In real life you would not know whether you had selected the best sales pitch, and you would only get one trial.</p>
+    <h2>Choose your own adventure:</h2>
+    <p>Which sales pitch are you going to show to lead number {{ lead-nb }} ?
+    <form action="/bandit" method="post">
+        <input name="token" type="hidden" value="{{ token }}">
+        <input type="submit" name="arm" value="0" />
+        <input type="submit" name="arm" value="1" />
+        <input type="submit" name="arm" value="2" />
+        <input type="submit" name="arm" value="3" />
+        <input type="submit" name="arm" value="4" />
+    </form>
+    <p>The data available so far is:</p>
+    <pre>{{ csv }}</pre>
+</div>
+
+{% endblock %}

@@ -12,6 +12,7 @@
                "verbose"
                "uuid"
                "access"
+               "cl-csv"
 
                ;; for @route annotation
                "cl-syntax-annot"
@@ -25,9 +26,10 @@
   :components ((:module "src"
                 :components
                 ((:file "main" :depends-on ("config" "view" "db"))
-                 (:file "web" :depends-on ("view"))
+                 (:file "web" :depends-on ("view" "challenges"))
                  (:file "view" :depends-on ("config"))
                  (:file "db" :depends-on ("config"))
-                 (:file "config"))))
+                 (:file "config")
+                 (:file "challenges"))))
   :description ""
   :in-order-to ((test-op (test-op "exam-test"))))
