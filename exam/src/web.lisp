@@ -78,13 +78,20 @@ Use the lock to avoid concurrent access.")
                      :if-exists :rename-and-delete)
     (write *students* :stream f)))
 
-(v:define-pipe ()
-  (v:file-faucet :file #p"exam.log"))
+(defvar *bullshit*
+  (v:define-pipe ()
+    (v:file-faucet :file #p"exam.log"))
+  "I don't care about the contents of this variable,
+I just don't want the code to be executed again on app reload")
 
 (defun page (state)
   "Return the HTML page for the given state"
   (case (exam-state state)
     (:loggedout (render #P"login.html" `(:token ,(exam-token state))))
+    (:simonsays (render #P"simonsays.html" `(:token ,(exam-token state)
+                                            :grade ,(exam-grade state)
+                                            :message ,(exam-message state)
+                                            :challenge ,(exam-challenge state))))
     (:collatz   (render #P"collatz.html" `(:token ,(exam-token state)
                                            :grade ,(exam-grade state)
                                            :message ,(exam-message state)
@@ -153,8 +160,8 @@ Use the lock to avoid concurrent access.")
          (setf (exam-token student) token)
          (setf (exam-name student) name)
          (setf (exam-grade student) :E)
-         (setf (exam-state student) :collatz)
-         (multiple-value-bind (challenge answer) (collatz)
+         (setf (exam-state student) :simonsays)
+         (multiple-value-bind (challenge answer) (simonsays 1000)
            (setf (exam-challenge student) challenge)
            (setf (exam-answer student) answer))
          (setf (exam-message student) "Congratulations ! You successfully logged in.
@@ -163,6 +170,62 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
          (v:log :info :login "Successful login for :token ~A :name ~A :id ~A"
                 token name id)
          student)))))
+
+(defun validate-simonsays (answer token)
+  "Check the answer and either move to next challenge or back to another simon says"
+  (with-lock-held (*lock*)
+    (let ((student (by-token token))
+          (answer (parse-integer answer :junk-allowed t)))
+      (cond
+        ((not student) ;; There is no registered student with this token
+         (let ((message
+                 (format
+                  nil
+                  "Invalid creds (bad token) :token ~A"
+                  token)))
+           (v:log :warn :simonsays message)
+           (error message)))
+        ((string/= (exam-state student) :simonsays)  ;;Why the fuck would they post on /simonsays, then ?
+         (let ((message (format nil "State was ~A for token ~A" (exam-state student) token)))
+           (v:log :warn :simonsays message)
+           (error message)))
+        ((not answer) ;; Not even wrong
+         (setf (exam-message student)
+               (format nil
+                       "You given answer (~A) was not even wrong. The correct answer was ~A. Try again"
+                       answer
+                       (exam-answer student)))
+         ;; Generate a new problem
+         (multiple-value-bind (challenge answer) (simonsays 1000)
+           (setf (exam-challenge student) challenge)
+           (setf (exam-answer student) answer))
+         (save-states)
+         (v:log :info :simonsays "Invalid answer ~A for :token ~A" answer token)
+         student)
+        ((= (exam-answer student) answer) ;; Good answer !
+         (setf (exam-state student) :data)
+         (setf (exam-grade student) :D)
+         (multiple-value-bind (challenge answer) (icecream 100)
+           (setf (exam-challenge student) challenge)
+           (setf (exam-answer student) answer))
+         (setf (exam-message student) "Congratulations ! Your answer was right.")
+         (save-states)
+         (v:log :info :simonsays "Right answer for :token ~A" token)
+         student)
+        ((/= (exam-answer student) answer) ;; Wrong answer !
+         (setf (exam-message student)
+               (format nil
+                       "You given answer (~A) was wrong. The correct answer was ~A. Try again."
+                       answer
+                       (exam-answer student)))
+         ;; Generate a new problem
+         (multiple-value-bind (challenge answer) (simonsays 1000)
+           (setf (exam-challenge student) challenge)
+           (setf (exam-answer student) answer))
+         (save-states)
+         (v:log :info :simonsays "Wrong answer for :token ~A" token)
+         student)))))
+
 
 (defun validate-collatz (answer token)
   "Check the answer and either move to next challenge or back to another collatz"
@@ -415,6 +478,14 @@ The goal is ~A or more."
         (page (login |token| |name| |id|))
     (t (c)
       (v:log :error :routes "Error when POST to / ~A" c)
+      (throw-code 403))))
+
+(defroute ("/simonsays" :method :POST) (&key |answer| |token|)
+  "Check the answer to the simonsays challenge"
+  (handler-case
+      (page (validate-simonsays |answer| |token|))
+    (t (c)
+      (v:log :error :routes "Error when POST to /simonsays ~A" c)
       (throw-code 403))))
 
 (defroute ("/collatz" :method :POST) (&key |answer| |token|)

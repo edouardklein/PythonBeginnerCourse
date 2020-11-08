@@ -3,8 +3,10 @@
   (:use :cl
         :cl-csv
         :access
+        :str
+        :cl-arrows
    )
-  (:export :collatz :icecream :exam-training-bandit :bandit
+  (:export :collatz :icecream :exam-training-bandit :bandit :simonsays
    :exam-bandit :pull-arm :cheat-arm :bandit-hleft :bandit->csv
    :bandit-benchmark :bandit-reward))
 (in-package :exam.challenges)
@@ -421,3 +423,34 @@ we see that all the simple strategies can somewhat reliably reach
 ;;                                     ,oracle
 ;;                                     ,(bandit-hleft start))
 ;;                                   :stream f)))))))
+
+(defun simonsays (n)
+  (let ((c (simonsays-challenge n)))
+    (values c (solve-simonsays c))))
+
+(defun simonsays-challenge (n)
+  "Return a 'Simon says' challenge"
+  (format nil "~{~A~%~}"
+          (loop repeat n
+                collect (concatenate 'string
+                                     (random-choice
+                                      '("Simon " "Mary " "Sue " "" "Yo momma "))
+                                     (random-choice
+                                      '("says " "" "shouts " "asks " "demands "))
+                                     (random-choice '("+ " "/ " "* " "- "))
+                                     (random-choice '("-" ""))
+                                     (format nil "~A" (random 1000))))))
+
+(defun solve-simonsays (s)
+  "Return the solution to the given simonsays string"
+  (let ((ANSWER 1))
+    (-<> s
+         (split-sequence:split-sequence #\newline <>)
+         (loop for l in <>
+               when (starts-with? "Simon says" l)
+                 collect (read-from-string (format nil "(~A)" (subseq l 11))))
+         (loop for e in <>
+               collect `(lambda (x) (,(car e) x ,(cadr e))))
+         (loop for e in <>
+               do (setf ANSWER (funcall (eval e) ANSWER))))
+    (floor ANSWER)))

@@ -13,6 +13,8 @@
                "uuid"
                "access"
                "cl-csv"
+               "str"
+               "cl-arrows"
 
                ;; for @route annotation
                "cl-syntax-annot"
