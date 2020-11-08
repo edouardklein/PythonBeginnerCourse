@@ -1,0 +1,38 @@
+{% extends "layouts/default.html" %}
+{% block title %}ESSEC's Python 101 Exam 2020 Challenge 0{% endblock %}
+{% block content %}
+<div id="main">
+    <h1>Python 101 Exam for groups C1 & C2, Challenge 0</h1>
+    <p>Your current grade is <strong>{{ grade }}</strong></p>
+    {% if message %}
+    <p>{{ message }}</p>
+    {% endif %}
+    <p>Start at n=1</p>
+    <p>Apply to n, one by one, all the operations listed below, but only if they start with "Simon says".</p>
+    <p>For example, if the instructions are:</p>
+    <pre>
+Simon asks / -725
+Simon says * 457
+Mary demands + -204
+Mary + -414
+Simon says - -147
+Mary - 823
+Mary shouts * -519
+Mary demands / -202
+Simon says + -974
+demands + -404
+"
+    </pre>
+    <p>then the final value is ((1*457)-(-147))+(-974)=-370</p>
+    <p>What is the final value (rounded to the nearest integer below) with the following instructions:</p>
+    <pre>
+{{ challenge }}
+    </pre>
+    <form action="/simonsays" method="post">
+        <input type="text" name="answer" placeholder="The answer, e.g. 42" />
+        <input name="token" type="hidden" value="{{ token }}">
+        <input type="submit" value="Submit" />
+    </form>
+</div>
+
+{% endblock %}
