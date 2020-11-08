@@ -12,7 +12,7 @@
         :bordeaux-threads
         :access
    )
-  (:export :*web*))
+  (:export :*web* :reload-students))
 (in-package :exam.web)
 
 ;; for @route annotation
@@ -55,6 +55,13 @@ Use the helper functions to access the data,
 so that it will sync to disk on edit.
 
 Use the lock to avoid concurrent access.")
+
+(defun reload-students ()
+  "Re-read students from disk"
+  (bordeaux-threads:with-lock-held (*lock*)
+    (setf *students*
+          (with-open-file (f #P"Students.sexp")
+            (read f)))))
 
 (defun by-id (id)
   "Return the exam state in *students* whose id matches id"
@@ -512,6 +519,18 @@ The goal is ~A or more."
     (t (c)
       (v:log :error :routes "Error when POST to /bandit ~A" c)
       (throw-code 403))))
+
+(defroute ("/test" :method :GET) ()
+  "Heartbeat"
+  (handler-case
+      (progn
+        (v:log :debug :debug "I'm alive 001")
+        (print "Heartbeat")
+        "OK")
+    (t (c)
+      (v:log :error :routes "Error when GET to /test ~A" c)
+      (throw-code 403))))
+
 ;;
 ;; Error pages
 
