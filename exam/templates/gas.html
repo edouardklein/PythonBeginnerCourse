@@ -1,0 +1,33 @@
+{% extends "layouts/default.html" %}
+{% block title %}ESSEC's Python 101 Exam 2020 Challenge 5{% endblock %}
+{% block content %}
+<div id="main">
+    <h1>Python for Business Exam 2021, Challenge 5</h1>
+    <p>Your current grade is <strong>{{ grade }}</strong></p>
+    {% if message %}
+    <p>{{ message }}</p>
+    {% endif %}
+    <p>The Seveso listed factory you work for can produce two compounds:</p>
+    <ul>
+        <li> Either a gas of chemical formula NH<sub>3</sub>,</li>
+        <li> Or a salt of chemical formula NH<sub>4</sub>Cl.</li>
+    </ul>
+    <p>You can sell the gas to refrigeration specialists for 40 € per each huge multiple of a molecular unit.</p>
+    <p>And you can sell the salt as a precursor for fertilizer production at 50 € per huge multiple of a molecular unit.</p>
+    <p>Another chemical process in your plant currently produces:</p>
+    <ul>
+        <li>50 huge multiple of a molecular unit of Nitrogen (N)</li>
+        <li>180 huge multiple of a molecular unit of Hydrogen (H)</li>
+        <li>40 huge multiple of a molecular unit of Chlorine (Cl)</li>
+    </ul>
+    <p>Which you can use as input to produce either gas or salt, using the stochiometric rates of conversion.</p>
+    <p>Create a production plan that maximizes the plant's profits:</p>
+    <form action="/gas" method="post">
+        <label for="salt">We should produce</label><input type="text" name="salt" placeholder="" /><label for="salt">huge multiple of a molecular unit of salt.</label><br/>
+        <label for="gas">We should produce</label><input type="text" name="gas" placeholder="" /><label for="gas">huge multiple of a molecular unit of gas.</label><br/>
+        <input name="token" type="hidden" value="{{ token }}">
+        <input type="submit" value="Submit" />
+    </form>
+</div>
+
+{% endblock %}

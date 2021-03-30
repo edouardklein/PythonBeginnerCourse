@@ -2,7 +2,7 @@
 {% block title %}ESSEC's Python 101 Exam 2020 Challenge 2{% endblock %}
 {% block content %}
 <div id="main">
-    <h1>Python 101 Exam for groups C1 & C2, Challenge 2</h1>
+    <h1>Python for Business Exam 2021, Challenge 2</h1>
     <p>Your current grade is <strong>{{ grade }}</strong></p>
     {% if message %}
     <p>{{ message|safe|escape }}</p>
@@ -12,10 +12,9 @@
     <p>You now have to choose between 5 sales pitch.</p>
     <p>The sales team managed to find 20 additionnal sales lead for you to try the pitches on</p>
     <h2>Meta information</h2>
-    <p>This is your trial {{ nbtrial }} out of 3.</p>
-    <p>To get a B or better you should get at least {{ benchmark }} sales lead to become customers.</p>
-    <p>Your grade can not go down, only the best trial out of your three will be taken into account.</p>
-    <p>In real life you would not know whether you had selected the best sales pitch, and you would only get one trial.</p>
+    <p>To get any credit you should get at least {{ benchmark }} sales lead to become customers.</p>
+    <p>Your grade can not go down, but it will only go up if you do better than {{ benchmark }}.</p>
+    <p>In real life you would not know whether you had selected the best sales pitch.</p>
     <h2>Choose your own adventure:</h2>
     <p>Which sales pitch are you going to show to lead number {{ lead-nb }} ?
     <form action="/bandit" method="post">

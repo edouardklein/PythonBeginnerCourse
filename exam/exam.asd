@@ -15,6 +15,7 @@
                "cl-csv"
                "str"
                "arrows"
+               "alexandria"
 
                ;; for @route annotation
                "cl-syntax-annot"

@@ -1,0 +1,48 @@
+{% extends "layouts/default.html" %}
+{% block title %}ESSEC's Python 101 Exam 2020 Challenge 3{% endblock %}
+{% block content %}
+<div id="main">
+    <h1>Python for Business Exam 2021, Challenge 3</h1>
+    <p>Your current grade is <strong>{{ grade }}</strong></p>
+    {% if message %}
+    <p>{{ message|safe|escape }}</p>
+    {% endif %}
+    <h2>Smirf studies</h2>
+    <p>A traveler in a remote land provides a confusing report of a small village full of smirfs, a green cousin of the smurfs.</p>
+    <p>He describes them as such:</p>
+    <ul>
+        <li>all smirfs that are {{ quality-0 }} are {{ quality-1 }} unless they are {{ quality-2 }};</li>
+        <li>but those who are {{ quality-2 }} but not {{ quality-1 }} are {{ quality-3 }};</li>
+        <li>and so are those who are both {{ quality-0 }} and {{ quality-1 }}.</li>
+        <li>Those who are both {{ quality-3 }} and not {{ quality-1 }} are {{ quality-0 }};</li>
+        <li>Among those who are not {{ quality-3 }}, one can find those who are {{ quality-2 }} and {{ quality-0 }};</li>
+        <li>and those who are not {{ quality-3 }} and not {{ quality-0 }} are {{ quality-2 }}.</li>
+        <li>Finally, those who are {{ quality-1 }} and {{ quality-2 }} are also {{ quality-0 }}.</li>
+    </ul>
+    <p>What can be said about the smirfs ?</p>
+    <form action="/sat" method="post">
+        <input name="token" type="hidden" value="{{ token }}">
+        <p>They are {{ quality-0 }}:</p>
+        <input type="radio" id="{{ quality-0 }}" name="{{ quality-0 }}" value="all" checked> <label for="{{ quality-0 }}">Yes, all of them</label>
+        <input type="radio" id="{{ quality-0 }}" name="{{ quality-0 }}" value="none"> <label for="{{ quality-0 }}">No, none of them</label>
+        <input type="radio" id="{{ quality-0 }}" name="{{ quality-0 }}" value="unknown"> <label for="{{ quality-0 }}">Maybe ?</label>
+        <p>They are {{ quality-1 }}:</p>
+        <input type="radio" id="{{ quality-1 }}" name="{{ quality-1 }}" value="all" checked> <label for="{{ quality-1 }}">Yes, all of them</label>
+        <input type="radio" id="{{ quality-1 }}" name="{{ quality-1 }}" value="none"> <label for="{{ quality-1 }}">No, none of them</label>
+        <input type="radio" id="{{ quality-1 }}" name="{{ quality-1 }}" value="unknown"> <label for="{{ quality-1 }}">Maybe ?</label>
+        <p>They are {{ quality-2 }}:</p>
+        <input type="radio" id="{{ quality-2 }}" name="{{ quality-2 }}" value="all" checked> <label for="{{ quality-2 }}">Yes, all of them</label>
+        <input type="radio" id="{{ quality-2 }}" name="{{ quality-2 }}" value="none"> <label for="{{ quality-2 }}">No, none of them</label>
+        <input type="radio" id="{{ quality-2 }}" name="{{ quality-2 }}" value="unknown"> <label for="{{ quality-2 }}">Maybe ?</label>
+        <p>They are {{ quality-3 }}:</p>
+        <input type="radio" id="{{ quality-3 }}" name="{{ quality-3 }}" value="all" checked> <label for="{{ quality-3 }}">Yes, all of them</label>
+        <input type="radio" id="{{ quality-3 }}" name="{{ quality-3 }}" value="none"> <label for="{{ quality-3 }}">No, none of them</label>
+        <input type="radio" id="{{ quality-3 }}" name="{{ quality-3 }}" value="unknown"> <label for="{{ quality-3 }}">Maybe ?</label>
+        <br/>
+        <input type="submit" value="Submit" />
+    </form>
+    <hr/>
+    <small>Inspired by "The Art of Computer Programming", Volume 4, Fascicle 6, Exercise 2.</small>
+</div>
+
+{% endblock %}

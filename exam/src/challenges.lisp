@@ -8,10 +8,8 @@
    )
   (:export :collatz :icecream :exam-training-bandit :bandit :simonsays
    :exam-bandit :pull-arm :cheat-arm :bandit-hleft :bandit->csv
-   :bandit-benchmark :bandit-reward))
+   :bandit-benchmark :bandit-reward :sat))
 (in-package :exam.challenges)
-
-
 
 (defun collatz-next (n)
   "Return the next element in the Collatz sequence"
@@ -203,12 +201,12 @@ All fonctions are niladic except for the 'Net income' header which needs to know
   (benchmark
    (make-bandit
     :probs (random-choice '(
-                            (.1 .2 .9)
-                            (.1 .9 .2)
-                            (.2 .1 .9)
-                            (.2 .9 .1)
-                            (.9 .1 .2)
-                            (.9 .2 .1)))
+                            (.1 .2 .4)
+                            (.1 .4 .2)
+                            (.2 .1 .4)
+                            (.2 .4 .1)
+                            (.4 .1 .2)
+                            (.4 .2 .1)))
     :data (loop repeat 3 collect '())
     :hleft h
     :benchmark 0
@@ -219,11 +217,11 @@ All fonctions are niladic except for the 'Net income' header which needs to know
   (benchmark
    (make-bandit
     :probs (random-choice '(
-                            (.1 .2 .3 .4 .9)
-                            (.1 .2 .3 .9 .4)
-                            (.1 .2 .9 .4 .3)
-                            (.1 .9 .3 .4 .2)
-                            (.9 .2 .3 .4 .1)
+                            (.1 .2 .3 .4 .6)
+                            (.1 .2 .3 .6 .4)
+                            (.1 .2 .6 .4 .3)
+                            (.1 .6 .3 .4 .2)
+                            (.6 .2 .3 .4 .1)
                             ))
     :data (loop repeat 5 collect '())
     :hleft h
@@ -454,3 +452,22 @@ we see that all the simple strategies can somewhat reliably reach
          (loop for e in <>
                do (setf ANSWER (funcall (eval e) ANSWER))))
     (floor ANSWER)))
+
+(defun all-permutations (list)
+  "https://stackoverflow.com/a/2087771"
+  (cond ((null list) nil)
+        ((null (cdr list)) (list list))
+        (t (loop for element in list
+             append (mapcar (lambda (l) (cons element l))
+                            (all-permutations (remove element list)))))))
+
+(defun sat ()
+  "Return a permutation of qualities, and the corresponding map from them to t, f, or nil"
+  (let ((qualities (random-choice (all-permutations
+                                   '("happy" "rich" "fun" "smart")))))
+    (values
+     qualities
+     `((,(elt qualities 0) "unknown")
+       (,(elt qualities 1) "all")
+       (,(elt qualities 2) "none")
+       (,(elt qualities 3) "all")))))
