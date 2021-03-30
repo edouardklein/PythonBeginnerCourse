@@ -14,7 +14,7 @@
                "access"
                "cl-csv"
                "str"
-               "cl-arrows"
+               "arrows"
 
                ;; for @route annotation
                "cl-syntax-annot"

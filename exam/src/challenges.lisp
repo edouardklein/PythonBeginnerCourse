@@ -4,7 +4,7 @@
         :cl-csv
         :access
         :str
-        :cl-arrows
+        :arrows
    )
   (:export :collatz :icecream :exam-training-bandit :bandit :simonsays
    :exam-bandit :pull-arm :cheat-arm :bandit-hleft :bandit->csv
