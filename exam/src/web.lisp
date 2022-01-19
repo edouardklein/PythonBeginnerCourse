@@ -89,6 +89,10 @@ I just don't want the code to be executed again on app reload")
   "Return the HTML page for the given state"
   (case (exam-state state)
     (:loggedout (render #P"login.html" `(:token ,(exam-token state))))
+    (:copypaste (render #P"copypaste.html" `(:token ,(exam-token state)
+                                              :grade ,(exam-grade state)
+                                              :message ,(exam-message state)
+                                              :challenge ,(exam-challenge state))))
     (:simonsays (render #P"simonsays.html" `(:token ,(exam-token state)
                                             :grade ,(exam-grade state)
                                             :message ,(exam-message state)
@@ -172,16 +176,67 @@ I just don't want the code to be executed again on app reload")
          (setf (exam-token student) token)
          (setf (exam-name student) name)
          (setf (exam-grade student) 0)
-         (setf (exam-state student) :simonsays)
-         (multiple-value-bind (challenge answer) (simonsays 1000)
-           (setf (exam-challenge student) challenge)
-           (setf (exam-answer student) answer))
+         ;; (setf (exam-state student) :simonsays)
+         ;; (multiple-value-bind (challenge answer) (simonsays 1000)
+         ;;   (setf (exam-challenge student) challenge)
+         ;;   (setf (exam-answer student) answer))
+          (setf (exam-state student) :copypaste)
+          (multiple-value-bind (challenge answer) (exam.challenges::copypaste)
+            (setf (exam-challenge student) challenge)
+            (setf (exam-answer student) answer))
          (setf (exam-message student) "Congratulations ! You successfully logged in.
 DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTON OF YOUR BROWSER OR YOU WON'T BE ABLE TO LOG BACK IN !")
          (save-states)
          (v:log :info :login "Successful login for :token ~A :name ~A :id ~A"
                 token name id)
          student)))))
+
+(defun validate-copypaste (answer token)
+  "Check the answer and move to the next challenge"
+  (with-lock-held (*lock*)
+    (let ((student (by-token token))
+          (answer (parse-integer answer :junk-allowed t)))
+      (cond
+        ((not student) ;; There is no registered student with this token
+         (let ((message
+                 (format
+                  nil
+                  "Invalid creds (bad token) :token ~A"
+                  token)))
+           (v:log :warn :copypaste message)
+           (error message)))
+        ((string/= (exam-state student) :copypaste)  ;;Why the fuck would they post on /copypaste, then ?
+         (let ((message (format nil "State was ~A for token ~A" (exam-state student) token)))
+           (v:log :warn :copypaste message)
+           (error message)))
+        ((not answer) ;; Not even wrong
+         (v:log :info :copypaste "Invalid answer ~A for :token ~A" answer token)
+         (setf (exam-message student)
+               (format nil
+                       "Your given answer (~A) was not even wrong. The correct answer was ~A."
+                       answer
+                       (exam-answer student))))
+        ((= (exam-answer student) answer) ;; Good answer !
+         (setf (exam-message student)
+               (format nil
+                       "Congratulations ! Your given answer (~A) was right."
+                       answer))
+         (setf (exam-grade student) (+ 1 (exam-grade student)))
+         (v:log :info :copypaste "Right answer for :token ~A" token))
+        ((/= (exam-answer student) answer) ;; Wrong answer !
+         (v:log :info :copypaste "Wrong answer for :token ~A" token)
+         (setf (exam-message student)
+               (format nil
+                       "You given answer (~A) was wrong. The correct answer was ~A."
+                       answer
+                       (exam-answer student)))))
+      ;; ;; Generate a new problem
+      ;; (multiple-value-bind (challenge answer) (collatz)
+      ;;   (setf (exam-challenge student) challenge)
+      ;;   (setf (exam-answer student) answer))
+      (setf (exam-state student) :end)
+      (save-states)
+      student)))
 
 (defun validate-simonsays (answer token)
   "Check the answer and move to next challenge"
@@ -533,6 +588,14 @@ The goal is ~A or more."
         (page (login |token| |name| |id|))
     (t (c)
       (v:log :error :routes "Error when POST to / ~A" c)
+      (throw-code 403))))
+
+(defroute ("/copypaste" :method :POST) (&key |answer| |token|)
+  "Check the answer to the copypaste challenge"
+  (handler-case
+      (page (validate-copypaste |answer| |token|))
+    (t (c)
+      (v:log :error :routes "Error when POST to /copypaste ~A" c)
       (throw-code 403))))
 
 (defroute ("/simonsays" :method :POST) (&key |answer| |token|)

@@ -24,12 +24,13 @@
   :root *static-directory*)
  (if (productionp)
      nil
-     :accesslog)
+     ;;FIXME guix :accesslog
+     nil)
  (if (getf (config) :error-log)
      `(:backtrace
        :output ,(getf (config) :error-log))
      nil)
- :session
+ ;; FIXME guix :session
  (if (productionp)
      nil
      (lambda (app)

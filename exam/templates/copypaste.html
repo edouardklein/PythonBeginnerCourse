@@ -1,0 +1,22 @@
+{% extends "layouts/default.html" %}
+{% block title %}ESSEC's Python for Business 2021 Challenge 0{% endblock %}
+{% block content %}
+<div id="main">
+    <h1>Python for Business 2021, Challenge 0</h1>
+    <p>Your current grade is <strong>{{ grade }}</strong></p>
+    {% if message %}
+    <p>{{ message }}</p>
+    {% endif %}
+    <p>Execute the Python code below (use the tools we have used during the first course)</p>
+    <pre>
+{{ challenge }}
+    </pre>
+    <p>Copy, in the field below, the value stored in the variable <code>toto</code> after the code has been executed.</p>
+    <form action="/copypaste" method="post">
+        <input type="text" name="answer" placeholder="The answer, e.g. 42" />
+        <input name="token" type="hidden" value="{{ token }}">
+        <input type="submit" value="Submit" />
+    </form>
+</div>
+
+{% endblock %}

@@ -7,7 +7,7 @@
         :arrows
    )
   (:export :collatz :icecream :exam-training-bandit :bandit :simonsays
-   :exam-bandit :pull-arm :cheat-arm :bandit-hleft :bandit->csv
+   :exam-bandit :pull-arm :cheat-arm :bandit-hleft :bandit->csv :copypaste
    :bandit-benchmark :bandit-reward :sat))
 (in-package :exam.challenges)
 
@@ -36,6 +36,14 @@ Make sure first that they are different so no student can stupidly copy paste th
            (let ((m (collatz-max n)))
              (when (/= n m)
                (return (values n m))))))
+
+(defun copypaste ()
+  "Return some semi-obfuscated python code and the integer it evaluates to."
+  (let ((n (random 1000000)))
+    (values
+     (format nil "import base64
+exec(base64.decodebytes(b'dG90byA9IDB4\\n').decode()+'~X')" n)
+     n)))
 
 (defun random-choice (l)
   "Return a random element of l"
