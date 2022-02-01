@@ -1,5 +1,3 @@
-(ql:quickload :exam)
-
 (defpackage exam.app
   (:use :cl)
   (:import-from :lack.builder
