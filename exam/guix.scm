@@ -16,7 +16,8 @@
     (inputs
      (list sbcl sbcl-numcl rlwrap sbcl-clack sbcl-lack sbcl-caveman sbcl-ningle
            sbcl-envy sbcl-cl-ppcre sbcl-verbose sbcl-uuid sbcl-access sbcl-cl-csv
-           sbcl-arrows sbcl-alexandria sbcl-djula sbcl-datafly sbcl-sxql cl-asdf cl-str))
+           sbcl-arrows sbcl-alexandria sbcl-djula sbcl-datafly sbcl-sxql cl-asdf cl-str
+           sbcl-slime-swank))
     (build-system trivial-build-system)
     (synopsis "dummy package")
     (description
