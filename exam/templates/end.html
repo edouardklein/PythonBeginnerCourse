@@ -4,6 +4,9 @@
 <div id="main">
     <h1>Python for Business Exam 2022</h1>
     <p>Your current grade is <strong>{{ grade }}</strong></p>
+    {% if message %}
+    <p>{{ message|safe|escape }}</p>
+    {% endif %}
     <p>Thank you for taking the exam :)</p>
     <p>Do not hesitate to send feedback or questions to my email.</p>
 </div>

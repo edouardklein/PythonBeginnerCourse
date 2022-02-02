@@ -141,7 +141,8 @@ I just don't want the code to be executed again on app reload")
              :grade ,(exam-grade state)
              :message ,(exam-message state))))
     (:end (render #P"end.html"
-                  `(:grade ,(exam-grade state))))
+                  `(:grade ,(exam-grade state)
+                    :message ,(exam-message state))))
     (otherwise
      (v:log :error :render "Invalid state ~A" (exam-state state))
      (throw-code 500))))
@@ -175,15 +176,17 @@ I just don't want the code to be executed again on app reload")
         (t
          (setf (exam-token student) token)
          (setf (exam-name student) name)
-         (setf (exam-grade student) 0)
-         ;; (setf (exam-state student) :simonsays)
-         ;; (multiple-value-bind (challenge answer) (simonsays 1000)
+         ;; Exam 0
+         ;; (setf (exam-grade student) 0)
+         ;; (setf (exam-state student) :copypaste)
+         ;; (multiple-value-bind (challenge answer) (exam.challenges::copypaste)
          ;;   (setf (exam-challenge student) challenge)
          ;;   (setf (exam-answer student) answer))
-          (setf (exam-state student) :copypaste)
-          (multiple-value-bind (challenge answer) (exam.challenges::copypaste)
-            (setf (exam-challenge student) challenge)
-            (setf (exam-answer student) answer))
+         ;; Exam 1
+         (setf (exam-state student) :simonsays)
+         (multiple-value-bind (challenge answer) (simonsays 1000)
+           (setf (exam-challenge student) challenge)
+           (setf (exam-answer student) answer))
          (setf (exam-message student) "Congratulations ! You successfully logged in.
 DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTON OF YOUR BROWSER OR YOU WON'T BE ABLE TO LOG BACK IN !")
          (save-states)
@@ -278,10 +281,10 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
                        answer
                        (exam-answer student)))))
       ;; Generate a new problem
-      (multiple-value-bind (challenge answer) (collatz)
-        (setf (exam-challenge student) challenge)
-        (setf (exam-answer student) answer))
-      (setf (exam-state student) :collatz)
+      ;; (multiple-value-bind (challenge answer) (collatz)
+      ;;   (setf (exam-challenge student) challenge)
+      ;;   (setf (exam-answer student) answer))
+      (setf (exam-state student) :end)
       (save-states)
       student)))
 
