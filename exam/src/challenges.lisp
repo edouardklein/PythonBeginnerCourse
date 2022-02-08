@@ -436,6 +436,10 @@ we see that all the simple strategies can somewhat reliably reach
 
 (defun simonsays-challenge (n)
   "Return a 'Simon says' challenge"
+  ;; FIXME: Prevent to high a number to avoid running into floating point precision problems
+  ;; FIXME: Put the "rouding down" part in bold, or accept +-1 answers.
+  ;; FIXME: Also, insist on n=1 at the beginning
+  ;; FIXME: Make it clear that numbers can be negative or just remove them altogether
   (format nil "~{~A~%~}"
           (loop repeat n
                 collect (concatenate 'string
