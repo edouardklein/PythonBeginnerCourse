@@ -183,8 +183,13 @@ I just don't want the code to be executed again on app reload")
          ;;   (setf (exam-challenge student) challenge)
          ;;   (setf (exam-answer student) answer))
          ;; Exam 1
-         (setf (exam-state student) :simonsays)
-         (multiple-value-bind (challenge answer) (simonsays 1000)
+         ;; (setf (exam-state student) :simonsays)
+         ;; (multiple-value-bind (challenge answer) (simonsays 1000)
+         ;;   (setf (exam-challenge student) challenge)
+         ;;   (setf (exam-answer student) answer))
+         ;; Exam 2
+         (setf (exam-state student) :collatz)
+         (multiple-value-bind (challenge answer) (collatz)
            (setf (exam-challenge student) challenge)
            (setf (exam-answer student) answer))
          (setf (exam-message student) "Congratulations ! You successfully logged in.
@@ -329,7 +334,7 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
       (multiple-value-bind (challenge answer) (icecream 1000)
         (setf (exam-challenge student) challenge)
         (setf (exam-answer student) answer))
-      (setf (exam-state student) :data)
+      (setf (exam-state student) :end)
       (save-states)
       student)))
 
