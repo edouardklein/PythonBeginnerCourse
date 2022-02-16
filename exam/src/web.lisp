@@ -97,6 +97,11 @@ I just don't want the code to be executed again on app reload")
                                             :grade ,(exam-grade state)
                                             :message ,(exam-message state)
                                             :challenge ,(exam-challenge state))))
+    (:drawer   (render #P"drawer.html" `(:token ,(exam-token state)
+                                         :grade ,(exam-grade state)
+                                         :message ,(exam-message state)
+                                         :challenge ,(exam-challenge state)
+                                         :answer ,(exam-answer state))))
     (:collatz   (render #P"collatz.html" `(:token ,(exam-token state)
                                            :grade ,(exam-grade state)
                                            :message ,(exam-message state)
@@ -290,6 +295,52 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
       ;;   (setf (exam-challenge student) challenge)
       ;;   (setf (exam-answer student) answer))
       (setf (exam-state student) :end)
+      (save-states)
+      student)))
+
+
+(defun validate-drawer (answer token)
+  "Check the answer and either move to next challenge or back to another drawer"
+  (with-lock-held (*lock*)
+    (let ((student (by-token token))
+          (answer (parse-drawer-solution answer)))
+      (cond
+        ((not student) ;; There is no registered student with this token
+         (let ((message
+                 (format
+                  nil
+                  "Invalid creds (bad token) :token ~A"
+                  token)))
+           (v:log :warn :drawer message)
+           (error message)))
+        ((string/= (exam-state student) :drawer)  ;;Why the fuck would they post on /drawer, then ?
+         (let ((message (format nil "State was ~A for token ~A" (exam-state student) token)))
+           (v:log :warn :drawer message)
+           (error message)))
+        ((not answer) ;; Not even wrong
+         (setf (exam-message student)
+               (format nil
+                       "I was not able to parse your given answer (~A) . The correct answer was ~A."
+                       answer
+                       (exam-answer student)))
+         (v:log :info :drawer "Invalid answer ~A for :token ~A" answer token))
+        ((= (exam-answer student) answer) ;; Good answer !
+         (v:log :info :drawer "Right answer for :token ~A" token)
+         (setf (exam-grade student) (+ 1 (exam-grade student)))
+         (setf (exam-message student) "Congratulations ! Your answer was right.")
+         (setf (exam-state student) :end))
+        ((/= (exam-answer student) answer) ;; Wrong answer !
+         (v:log :info :drawer "Wrong answer for :token ~A" token)
+         (setf (exam-message student)
+               (format nil
+                       "You given answer:<br/>
+<pre>~A</pre><br/> was wrong. The correct answer was:<br/><pre>~A</pre>."
+                       answer
+                       (format-drawer-solution (exam-answer student))))
+         ;; Generate a new problem
+         (multiple-value-bind (challenge answer) (drawer)
+           (setf (exam-challenge student) challenge)
+           (setf (exam-answer student) answer))))
       (save-states)
       student)))
 

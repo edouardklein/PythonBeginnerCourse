@@ -8,7 +8,7 @@
    )
   (:export :collatz :icecream :exam-training-bandit :bandit :simonsays
    :exam-bandit :pull-arm :cheat-arm :bandit-hleft :bandit->csv :copypaste
-   :bandit-benchmark :bandit-reward :sat))
+   :bandit-benchmark :bandit-reward :sat :drawer :format-drawer-solution))
 (in-package :exam.challenges)
 
 (defun collatz-next (n)
@@ -44,6 +44,61 @@ Make sure first that they are different so no student can stupidly copy paste th
      (format nil "import base64
 exec(base64.decodebytes(b'dG90byA9IDB4\\n').decode()+'~X')" n)
      n)))
+
+(defun drawer ()
+  "Return a knapsack problem and its solution"
+  (let ((problem (drawer-problem)))
+    (values problem (apply #'drawer-solution problem))))
+
+(defun drawer-problem ()
+  "Return an instance of a knapsack problem"
+  (list (+ 25 (random 100))  ; Height
+        (remove-duplicates
+         (loop repeat 5 collect (+ 5 (random 20)))) ; Available drawers
+        (random 20))) ; Leeway
+
+(defun combinations (xs k)
+  "https://rosettacode.org/wiki/Combinations_with_repetitions#Common_Lisp"
+  (let ((x (car xs)))
+    (cond
+      ((null xs) nil)
+      ((= k 1) (mapcar #'list xs))
+      (t (append (mapcar (lambda (ys) (cons x ys))
+                         (combinations xs (1- k)))
+                 (combinations (cdr xs) k))))))
+
+(defun drawer-solution (total available-lengths leeway)
+  "Return the solution to the knapsack problem"
+  (loop for k = 1 then (1+ k)
+        while (<= (* k (apply #'min available-lengths))
+                  total)
+        append (loop for c in (combinations available-lengths k)
+                     when (let ((length (reduce '+ c)))
+                            (and
+                             (<= length total)
+                             (>= length (- total leeway))))
+                     collect (sort c #'<)) into answer
+        finally (return answer)))
+
+(defun parse-drawer-solution (s)
+  "Return a list of list of ints from s, or nil if the result is unparseable"
+  (handler-case
+      (loop for line in (uiop:split-string s :separator (list #\newline))
+            unless (= 0 (length line))
+            collect (map 'list #'parse-integer (uiop:split-string line :separator ",")))
+    (error (c)
+      (values nil c))))
+
+(defun format-drawer-solution (sol)
+  "Return the given solution, correctly formatted"
+  (with-output-to-string (s)
+    (loop for line in sol
+          do (format s "~{~A~^, ~}~%" line))))
+
+(defun set= (s1 s2 &key (test #'eql))
+  "Set equality, not efficient, bur correct"
+  (and (subsetp s1 s2 :test test)
+       (subsetp s2 s1 :test test)))
 
 (defun random-choice (l)
   "Return a random element of l"
