@@ -30,7 +30,7 @@
 (defun collatz ()
   "Return a random number and the maximum number of its Collatz sequence
 
-Make sure first that they are different so no student can stupidly copy paste the question as the answer"
+Make sure first that they are different so no student can naively copy paste the question as the answer"
   (loop for n = (+ 10000000000000000000 (random 10000000000000000000000000000000000000000000))
         do
            (let ((m (collatz-max n)))
