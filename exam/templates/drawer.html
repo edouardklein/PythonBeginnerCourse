@@ -46,8 +46,8 @@
         </ul>
     </p>
 
-    <form action="/collatz" method="post">
-        <input type="textarea" name="answer" placeholder="The answer, e.g. 42" />
+    <form action="/drawer" method="post">
+        <textarea name="answer" placeholder="The answer, e.g. 42"></textarea>
         <input name="token" type="hidden" value="{{ token }}">
         <input type="submit" value="Submit" />
     </form>
@@ -56,7 +56,6 @@
         <li>Check <a href="https://docs.python.org/3/library/itertools.html">the documentation of the itertools package</a>. 5 minutes of reading can save 10 minutes of coding.</li>
         <li>
     </ul>
-    <p>P.S. If you ever find a number for which you don't end up at 1, please alert the nearest mathematician, you have just solved an open problem in mathematics.</p>
 </div>
 
 {% endblock %}
