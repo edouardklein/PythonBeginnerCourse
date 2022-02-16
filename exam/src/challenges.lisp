@@ -8,7 +8,7 @@
    )
   (:export :collatz :icecream :exam-training-bandit :bandit :simonsays
    :exam-bandit :pull-arm :cheat-arm :bandit-hleft :bandit->csv :copypaste
-   :bandit-benchmark :bandit-reward :sat :drawer :format-drawer-solution))
+   :bandit-benchmark :bandit-reward :sat :drawer :parse-drawer-solution :format-drawer-solution))
 (in-package :exam.challenges)
 
 (defun collatz-next (n)
