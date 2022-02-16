@@ -100,7 +100,10 @@ I just don't want the code to be executed again on app reload")
     (:drawer   (render #P"drawer.html" `(:token ,(exam-token state)
                                          :grade ,(exam-grade state)
                                          :message ,(exam-message state)
-                                         :challenge ,(exam-challenge state)
+                                         :total ,(nth 0 (exam-challenge state))
+                                         :drawers ,(format nil "~{~A~^, ~}"
+                                                           (nth 1 (exam-challenge state)))
+                                         :leeway ,(nth 2 (exam-challenge state))
                                          :answer ,(exam-answer state))))
     (:collatz   (render #P"collatz.html" `(:token ,(exam-token state)
                                            :grade ,(exam-grade state)
@@ -193,8 +196,8 @@ I just don't want the code to be executed again on app reload")
          ;;   (setf (exam-challenge student) challenge)
          ;;   (setf (exam-answer student) answer))
          ;; Exam 2
-         (setf (exam-state student) :collatz)
-         (multiple-value-bind (challenge answer) (collatz)
+         (setf (exam-state student) :drawer)
+         (multiple-value-bind (challenge answer) (drawer)
            (setf (exam-challenge student) challenge)
            (setf (exam-answer student) answer))
          (setf (exam-message student) "Congratulations ! You successfully logged in.
@@ -671,6 +674,14 @@ The goal is ~A or more."
       (page (validate-collatz |answer| |token|))
     (t (c)
       (v:log :error :routes "Error when POST to /collatz ~A" c)
+      (throw-code 403))))
+
+(defroute ("/drawer" :method :POST) (&key |answer| |token|)
+  "Check the answer to the drawer challenge"
+  (handler-case
+      (page (validate-drawer |answer| |token|))
+    (t (c)
+      (v:log :error :routes "Error when POST to /drawer ~A" c)
       (throw-code 403))))
 
 (defroute ("/data" :method :POST) (&key |answer| |token|)
