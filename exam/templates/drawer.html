@@ -5,7 +5,7 @@
     <h1>Python for Business Exam 2022, Challenge 3</h1>
     <p>Your current grade is <strong>{{ grade }}</strong></p>
     {% if message %}
-    <p>{{ message }}</p>
+    <p>{{ message|safe|escape }}</p>
     {% endif %}
     <p>My mother in law has a cabinet, the heigth of which is 77 cm.</p>
     <p>She can buy as many drawers of length 39 cm, 26 cm, 13 cm, and 17 cm as she needs.</p>
