@@ -8,7 +8,7 @@
    )
   (:export :collatz :icecream :exam-training-bandit :bandit :simonsays
    :exam-bandit :pull-arm :cheat-arm :bandit-hleft :bandit->csv :copypaste
-   :bandit-benchmark :bandit-reward :sat :drawer :parse-drawer-solution :format-drawer-solution))
+   :bandit-benchmark :bandit-reward :sat :drawer :parse-drawer-solution :format-drawer-solution :seteql))
 (in-package :exam.challenges)
 
 (defun collatz-next (n)
@@ -95,7 +95,7 @@ exec(base64.decodebytes(b'dG90byA9IDB4\\n').decode()+'~X')" n)
     (loop for line in sol
           do (format s "~{~A~^, ~}~%" line))))
 
-(defun set= (s1 s2 &key (test #'eql))
+(defun seteql (s1 s2 &key (test #'eql))
   "Set equality, not efficient, bur correct"
   (and (subsetp s1 s2 :test test)
        (subsetp s2 s1 :test test)))

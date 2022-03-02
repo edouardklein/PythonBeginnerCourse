@@ -323,22 +323,26 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
         ((not answer) ;; Not even wrong
          (setf (exam-message student)
                (format nil
-                       "I was not able to parse your given answer (~A) . The correct answer was ~A."
+                       "I was not able to parse your given answer (~A) . The correct answer was <pre>~A</pre>."
                        answer
-                       (exam-answer student)))
+                       (format-drawer-solution (exam-answer student))))
+         ;; Generate a new problem
+         (multiple-value-bind (challenge answer) (drawer)
+           (setf (exam-challenge student) challenge)
+           (setf (exam-answer student) answer))
          (v:log :info :drawer "Invalid answer ~A for :token ~A" answer token))
-        ((= (exam-answer student) answer) ;; Good answer !
+        ((seteql (exam-answer student) answer :test #'equal) ;; Good answer !
          (v:log :info :drawer "Right answer for :token ~A" token)
          (setf (exam-grade student) (+ 1 (exam-grade student)))
          (setf (exam-message student) "Congratulations ! Your answer was right.")
          (setf (exam-state student) :end))
-        ((/= (exam-answer student) answer) ;; Wrong answer !
+        ((not (seteql (exam-answer student) answer :test #'equal)) ;; Wrong answer !
          (v:log :info :drawer "Wrong answer for :token ~A" token)
          (setf (exam-message student)
                (format nil
                        "You given answer:<br/>
 <pre>~A</pre><br/> was wrong. The correct answer was:<br/><pre>~A</pre>."
-                       answer
+                       (format-drawer-solution answer)
                        (format-drawer-solution (exam-answer student))))
          ;; Generate a new problem
          (multiple-value-bind (challenge answer) (drawer)
