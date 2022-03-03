@@ -410,12 +410,12 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
   (cond
     ((>= value 0)
      (and
-      (< value (* target 1.1))
-      (> value (* target 0.9))))
+      (<= value (* target 1.1))
+      (>= value (* target 0.9))))
     ((< value 0)
      (and
-      (> value (* target 1.1))
-      (< value (* target 0.9))))))
+      (>= value (* target 1.1))
+      (<= value (* target 0.9))))))
 
 (defun validate-data (answer token)
   "Validate the answer to the data analysis challenge before moving on"

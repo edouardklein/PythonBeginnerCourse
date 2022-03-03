@@ -205,7 +205,17 @@ All fonctions are niladic except for the 'Net income' header which needs to know
   (let ((preds (icecream-predictors-sample conf)))
     (concatenate 'list preds `(,(apply (access conf "Net income") preds)))))
 
-(defun icecream (n)
+(defun icecream ()
+  "Return 1000 randomly generated lines, and the answer, with some sanity checks."
+  (loop with challenge
+        with answer = 0
+        do (multiple-value-bind (c a) (icecream-lines 1000)
+             (setf challenge c)
+             (setf answer a))
+        while (< (abs answer) 10)
+        finally (return (values challenge answer))))
+
+(defun icecream-lines (n)
    "Return randomly generated icecream truck stats and the missing value"
   (let* ((conf (icecream-configuration))
          (last-preds (icecream-predictors-sample conf)))
