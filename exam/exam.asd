@@ -16,6 +16,7 @@
                "str"
                "arrows"
                "alexandria"
+               "linear-programming"
 
                ;; for @route annotation
                "cl-syntax-annot"

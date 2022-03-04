@@ -147,7 +147,13 @@ I just don't want the code to be executed again on app reload")
            #P"gas.html"
            `(:token ,(exam-token state)
              :grade ,(exam-grade state)
-             :message ,(exam-message state))))
+             :message ,(exam-message state)
+             :gas-price ,(getf (exam-challenge state) :gas-price)
+             :salt-price ,(getf (exam-challenge state) :salt-price)
+             :n ,(getf (exam-challenge state) :n)
+             :h ,(getf (exam-challenge state) :h)
+             :cl ,(getf (exam-challenge state) :cl)
+             )))
     (:end (render #P"end.html"
                   `(:grade ,(exam-grade state)
                     :message ,(exam-message state))))
@@ -196,8 +202,8 @@ I just don't want the code to be executed again on app reload")
          ;;   (setf (exam-challenge student) challenge)
          ;;   (setf (exam-answer student) answer))
          ;; Exam 2
-         (setf (exam-state student) :data)
-         (multiple-value-bind (challenge answer) (icecream 1000)
+         (setf (exam-state student) :gas)
+         (multiple-value-bind (challenge answer) (gas)
            (setf (exam-challenge student) challenge)
            (setf (exam-answer student) answer))
          (setf (exam-message student) "Congratulations ! You successfully logged in.
@@ -632,17 +638,26 @@ The goal is ~A or more."
            (v:log :warn :gas message)
            (error message)))
         ((and
-          (= salt 30)
-          (= gas 20)) ;; Good answer !
+          (not (null salt))
+          (not (null gas))
+          (within-ten-percent-of (getf (exam-answer student) :salt) salt)
+          (within-ten-percent-of (getf (exam-answer student) :gas) gas));; good answer
          (setf (exam-grade student) (+ 1 (exam-grade student)))
          (setf (exam-message student) "Congratulations ! Your answer was correct")
+         (setf (exam-state student) :end)
          (v:log :info :gas "Right answer for :token ~A" token))
         (t ;; Wrong answer !
          (v:log :info :gas "Wrong answer for :token ~A" token)
          (setf (exam-message student)
-               "You given answer was wrong.")))
-      (setf (exam-state student) :training-bandit)
-      (setf (exam-challenge student) (exam-training-bandit 30))
+               (format nil "Your answer (salt ~A, gas ~A) was wrong,
+ the correct answer was salt: ~A, gas ~A."
+                       salt gas
+                       (getf (exam-answer student) :salt)
+                       (getf (exam-answer student) :gas)))
+         (setf (exam-state student) :gas)
+         (multiple-value-bind (challenge answer) (gas)
+           (setf (exam-challenge student) challenge)
+           (setf (exam-answer student) answer))))
       (save-states)
       student)))
 

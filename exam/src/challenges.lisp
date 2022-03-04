@@ -5,8 +5,9 @@
         :access
         :str
         :arrows
+        :linear-programming
    )
-  (:export :collatz :icecream :exam-training-bandit :bandit :simonsays
+  (:export :collatz :icecream :exam-training-bandit :bandit :simonsays :gas
    :exam-bandit :pull-arm :cheat-arm :bandit-hleft :bandit->csv :copypaste
    :bandit-benchmark :bandit-reward :sat :drawer :parse-drawer-solution :format-drawer-solution :seteql))
 (in-package :exam.challenges)
@@ -548,3 +549,47 @@ we see that all the simple strategies can somewhat reliably reach
        (,(elt qualities 1) "all")
        (,(elt qualities 2) "none")
        (,(elt qualities 3) "all")))))
+
+(defun gas ()
+  "Return the amount of available precursors, the price of gas and salt,
+and how much of each should be produced.
+We loop until the randomly chosen values for the inputs yield a non trivial
+answer"
+  (loop with gas-price
+        with salt-price
+        with cl
+        with h
+        with n
+        with gas = 0
+        with salt = 0
+        do (let* ((_gas-price (random 20))
+                  (_salt-price (random 20))
+                  (_cl (random 80))
+                  (_h (random 360))
+                  (_n (random 50))
+                  (problem (parse-linear-problem
+                            `(max (= pognon (+ (* ,_gas-price gas) (* ,_salt-price salt))))
+                            `((<= gas n-gas)
+                              (<= (* 3 gas) h-gas)
+                              (<= salt n-salt)
+                              (<= (* 4 salt) h-salt)
+                              (<= salt cl-salt)
+                              (<= cl-salt ,_cl)
+                              (<= (+ h-salt h-gas) ,_h)
+                              (<= (+ n-salt n-gas) ,_n))))
+                  (solution (solve-problem problem)))
+             (setf gas-price _gas-price)
+             (setf salt-price _salt-price)
+             (setf cl _cl)
+             (setf h _h)
+             (setf n _n)
+             (setf gas (solution-variable solution 'gas))
+             (setf salt (solution-variable solution 'salt)))
+        while (or (zerop gas) (zerop salt))
+        finally (return (values (list :gas-price gas-price
+                                      :salt-price salt-price
+                                      :cl cl
+                                      :n n
+                                      :h h)
+                                (list :gas gas
+                                      :salt salt)))))
