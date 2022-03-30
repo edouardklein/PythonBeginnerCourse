@@ -97,6 +97,9 @@ I just don't want the code to be executed again on app reload")
                                             :grade ,(exam-grade state)
                                             :message ,(exam-message state)
                                             :challenge ,(exam-challenge state))))
+    (:huge-drawer   (render #P"huge-drawer.html" `(:token ,(exam-token state)
+                                                   :grade ,(exam-grade state)
+                                                   :message ,(exam-message state))))
     (:drawer   (render #P"drawer.html" `(:token ,(exam-token state)
                                          :grade ,(exam-grade state)
                                          :message ,(exam-message state)
@@ -202,7 +205,7 @@ I just don't want the code to be executed again on app reload")
          ;;   (setf (exam-challenge student) challenge)
          ;;   (setf (exam-answer student) answer))
          ;; Exam 2
-         (setf (exam-state student) :gas)
+         (setf (exam-state student) :sat)
          (multiple-value-bind (challenge answer) (gas)
            (setf (exam-challenge student) challenge)
            (setf (exam-answer student) answer))
@@ -307,6 +310,44 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
       (save-states)
       student)))
 
+(defun validate-huge-drawer (answer token)
+  "Check the answer and either move to next challenge or back to the same huge drawer"
+  (with-lock-held (*lock*)
+    (let ((student (by-token token))
+          (answer (parse-huge-drawer-solution answer)))
+      (cond
+        ((not student) ;; There is no registered student with this token
+         (let ((message
+                 (format
+                  nil
+                  "Invalid creds (bad token) :token ~A"
+                  token)))
+           (v:log :warn :huge-drawer message)
+           (error message)))
+        ((string/= (exam-state student) :huge-drawer)  ;;Why the fuck would they post on /drawer, then ?
+         (let ((message (format nil "State was ~A for token ~A" (exam-state student) token)))
+           (v:log :warn :huge-drawer message)
+           (error message)))
+        ((not answer) ;; Not even wrong
+         (setf (exam-message student)
+               (format nil
+                       "I was not able to parse your given answer (~A)."
+                       answer))
+         (v:log :info :drawer "Invalid answer ~A for :token ~A" answer token))
+        ((huge-drawer-validp answer) ;; Good answer !
+         (v:log :info :drawer "Right answer for :token ~A" token)
+         (setf (exam-grade student) (+ 1 (exam-grade student)))
+         (setf (exam-message student) "Congratulations ! Your answer was right.")
+         (setf (exam-state student) :end))
+        ((not (huge-drawer-validp answer)) ;; Wrong answer !
+         (v:log :info :drawer "Wrong answer for :token ~A" token)
+         (setf (exam-message student)
+               (format nil
+                       "You given answer:<br/>
+<pre>~A</pre><br/> was wrong."
+                       answer))))
+      (save-states)
+      student)))
 
 (defun validate-drawer (answer token)
   "Check the answer and either move to next challenge or back to another drawer"
@@ -614,7 +655,7 @@ The goal is ~A or more."
          (v:log :info :sat "Wrong answer for :token ~A" token)
          (setf (exam-message student)
                "You given answer was wrong.")))
-      (setf (exam-state student) :gas)
+      (setf (exam-state student) :huge-drawer)
       (save-states)
       student)))
 
@@ -707,6 +748,14 @@ The goal is ~A or more."
       (page (validate-drawer |answer| |token|))
     (t (c)
       (v:log :error :routes "Error when POST to /drawer ~A" c)
+      (throw-code 403))))
+
+(defroute ("/huge-drawer" :method :POST) (&key |answer| |token|)
+  "Check the answer to the huge drawer challenge"
+  (handler-case
+      (page (validate-huge-drawer |answer| |token|))
+    (t (c)
+      (v:log :error :routes "Error when POST to /huge-drawer ~A" c)
       (throw-code 403))))
 
 (defroute ("/data" :method :POST) (&key |answer| |token|)

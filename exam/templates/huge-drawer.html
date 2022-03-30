@@ -1,0 +1,41 @@
+{% extends "layouts/default.html" %}
+{% block title %}ESSEC's Python 101 Exam 2020 Challenge 3{% endblock %}
+{% block content %}
+<div id="main">
+    <h1>Python for Business Exam 2022, Challenge 3</h1>
+    <p>Your current grade is <strong>{{ grade }}</strong></p>
+    {% if message %}
+    <p>{{ message|safe|escape }}</p>
+    {% endif %}
+    <p>Thanks to your help, my mother in law went in a cabinet-buying frenzy and
+    bought a 10000 mm tall cabinet (yes, 10 m, she has high ceilings, she lives
+    in a warehouse) to store her legos.</p>
+    <p>She can buy as many drawers of length 21 mm, 12 mm, 9 mm, and 6 mm as she needs (tiny legos => tiny drawers).</p>
+    <p>She want to know how many drawers of each size she can use, she wishes to minimize the amount of unused space.</p>
+    <p>In order to parse the answer, my mother in law needs to see all the drawers she should buy, as integers, on a single line, separated by commas.</p>
+    <p>So, for example, for a smaller cabinet:
+        <ul>
+            <li>Total height: 30 </li>
+            <li>Available drawers: 21, 12, 9, 6</li>
+        </ul>
+        one answer could be:
+        <pre>
+            21, 9
+        </pre>
+    </p>
+
+    <form action="/huge-drawer" method="post">
+        <textarea name="answer" placeholder="The answer, e.g. 42"></textarea>
+        <input name="token" type="hidden" value="{{ token }}">
+        <input type="submit" value="Submit" />
+    </form>
+    <p><strong>Hints and tips:</strong></p>
+    <ul>
+        <li>Check <a href="https://developers.google.com/optimization/bin/knapsack">the ortools example of a knapsack problem</a>.</li>
+        <li>But also read <a href="https://developers.google.com/optimization/reference/python/algorithms/pywrapknapsack_solver">the reference documentation</a> because choosing the wrong algorithm won't let you solve this huge problem. If the computer thinks for more than a handful of seconds, you are doing it wrong.</li>
+        <li>You can try multiple times.</li>
+        <li>Focus on getting the right answer first, and then format it in a way my mother in law can understand</li>
+    </ul>
+</div>
+
+{% endblock %}

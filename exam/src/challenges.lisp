@@ -46,6 +46,18 @@ Make sure first that they are different so no student can naively copy paste the
 exec(base64.decodebytes(b'dG90byA9IDB4\\n').decode()+'~X')" n)
      n)))
 
+(defun parse-huge-drawer-solution (s)
+   (map 'list #'parse-integer (uiop:split-string s :separator ",")))
+
+(defun huge-drawer-valipd (answer)
+  "Check the answer to the hardcoded huge drawer problem"
+  (= (loop for drawer in answer
+           sum drawer into height
+           when (not (member drawer '(21 12 9 6)))
+             do (return nil)
+           finally (return height))
+     9999))
+
 (defun drawer ()
   "Return a knapsack problem and its solution"
   (let ((problem (drawer-problem)))
