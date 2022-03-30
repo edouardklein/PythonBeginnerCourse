@@ -9,7 +9,8 @@
    )
   (:export :collatz :icecream :exam-training-bandit :bandit :simonsays :gas
    :exam-bandit :pull-arm :cheat-arm :bandit-hleft :bandit->csv :copypaste
-   :bandit-benchmark :bandit-reward :sat :drawer :parse-drawer-solution :format-drawer-solution :seteql))
+           :bandit-benchmark :bandit-reward :sat :drawer :parse-drawer-solution :format-drawer-solution :seteql
+           :parse-huge-drawer-solution :huge-drawer-validp))
 (in-package :exam.challenges)
 
 (defun collatz-next (n)
@@ -47,14 +48,15 @@ exec(base64.decodebytes(b'dG90byA9IDB4\\n').decode()+'~X')" n)
      n)))
 
 (defun parse-huge-drawer-solution (s)
-   (map 'list #'parse-integer (uiop:split-string s :separator ",")))
+  (map 'list #'(lambda (x) (parse-integer x :junk-allowed t))
+       (uiop:split-string s :separator ",")))
 
-(defun huge-drawer-valipd (answer)
+(defun huge-drawer-validp (answer)
   "Check the answer to the hardcoded huge drawer problem"
   (= (loop for drawer in answer
            sum drawer into height
            when (not (member drawer '(21 12 9 6)))
-             do (return nil)
+             do (return 0)
            finally (return height))
      9999))
 

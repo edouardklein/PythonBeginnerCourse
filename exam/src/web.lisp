@@ -206,7 +206,7 @@ I just don't want the code to be executed again on app reload")
          ;;   (setf (exam-answer student) answer))
          ;; Exam 2
          (setf (exam-state student) :sat)
-         (multiple-value-bind (challenge answer) (gas)
+         (multiple-value-bind (challenge answer) (sat)
            (setf (exam-challenge student) challenge)
            (setf (exam-answer student) answer))
          (setf (exam-message student) "Congratulations ! You successfully logged in.
