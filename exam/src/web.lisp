@@ -57,6 +57,28 @@ so that it will sync to disk on edit.
 
 Use the lock to avoid concurrent access.")
 
+(defvar *exam-mode* t
+  "If true, will prevent students from relogining. Its value will affect the grade
+increase")
+
+(defun switch-mode ()
+  (setf *exam-mode* (not *exam-mode*))
+  (v:log :warn :mode (format nil "Exam mode is now ~A" *exam-mode*)))
+
+(defun manually-increase-grade (id amount)
+  "A facility to increase a grade, and keep a log"
+  (setf (exam-grade (by-id id))
+        (+ (exam-grade (by-id id)) amount))
+  (v:log :warn :manualgrading
+         (format nil "Student :id ~A got their grade increased by ~A to ~A"
+                 id amount (exam-grade (by-id id)))))
+
+(defun grade-increase ()
+  "Return the amount by which the grade should increase"
+  (if *exam-mode*
+      1
+      .5))
+
 (defun reload-students ()
   "Re-read students from disk"
   (bordeaux-threads:with-lock-held (*lock*)
@@ -180,7 +202,7 @@ I just don't want the code to be executed again on app reload")
                   token name id)))
            (v:log :warn :login message)
            (error message)))
-        ((exam-token student) ;; The student has already logged in
+        ((and (exam-token student) *exam-mode*) ;; The student has already logged in and we are in exam-mode
          (let ((message
                  (format
                   nil
@@ -200,7 +222,7 @@ I just don't want the code to be executed again on app reload")
          ;;   (setf (exam-challenge student) challenge)
          ;;   (setf (exam-answer student) answer))
          ;; Exam 1
-         (setf (exam-state student) :drawer)
+         ;;(setf (exam-state student) :drawer)
           (multiple-value-bind (challenge answer) (drawer)
             (setf (exam-challenge student) challenge)
             (setf (exam-answer student) answer))
@@ -246,7 +268,7 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
                (format nil
                        "Congratulations ! Your given answer (~A) was right."
                        answer))
-         (setf (exam-grade student) (+ 1 (exam-grade student)))
+         (setf (exam-grade student) (+ (grade-increase) (exam-grade student)))
          (v:log :info :copypaste "Right answer for :token ~A" token))
         ((/= (exam-answer student) answer) ;; Wrong answer !
          (v:log :info :copypaste "Wrong answer for :token ~A" token)
@@ -298,7 +320,7 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
                (format nil
                        "Congratulations ! Your given answer (~A) was right."
                        answer))
-         (setf (exam-grade student) (+ 1 (exam-grade student)))
+         (setf (exam-grade student) (+ (grade-increase) (exam-grade student)))
          (v:log :info :simonsays "Right answer for :token ~A" token)
          (setf (exam-state student) :end)
          )
@@ -347,7 +369,7 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
          (v:log :info :drawer "Invalid answer ~A for :token ~A" answer token))
         ((huge-drawer-validp answer) ;; Good answer !
          (v:log :info :drawer "Right answer for :token ~A" token)
-         (setf (exam-grade student) (+ 1 (exam-grade student)))
+         (setf (exam-grade student) (+ (grade-increase) (exam-grade student)))
          (setf (exam-message student) "Congratulations ! Your answer was right.")
          (setf (exam-state student) :end))
         ((not (huge-drawer-validp answer)) ;; Wrong answer !
@@ -391,7 +413,7 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
          (v:log :info :drawer "Invalid answer ~A for :token ~A" answer token))
         ((seteql (exam-answer student) answer :test #'equal) ;; Good answer !
          (v:log :info :drawer "Right answer for :token ~A" token)
-         (setf (exam-grade student) (+ 1 (exam-grade student)))
+         (setf (exam-grade student) (+ (grade-increase)(exam-grade student)))
          (setf (exam-message student) "Congratulations ! Your answer was right.")
          (setf (exam-state student) :end))
         ((not (seteql (exam-answer student) answer :test #'equal)) ;; Wrong answer !
@@ -441,7 +463,7 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
          (v:log :info :collatz "Invalid answer ~A for :token ~A" answer token))
         ((= (exam-answer student) answer) ;; Good answer !
          (v:log :info :collatz "Right answer for :token ~A" token)
-         (setf (exam-grade student) (+ 1 (exam-grade student)))
+         (setf (exam-grade student) (+ (grade-increase)(exam-grade student)))
          (setf (exam-message student) "Congratulations ! Your answer was right.")
          (setf (exam-state student) :end))
         ((/= (exam-answer student) answer) ;; Wrong answer !
@@ -511,7 +533,7 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
            (setf (exam-answer student) answer))
          )
         ((within-ten-percent-of (exam-answer student) answer) ;; Good answer !
-         (setf (exam-grade student) (+ 1 (exam-grade student)))
+         (setf (exam-grade student) (+ (grade-increase)(exam-grade student)))
          (setf (exam-message student) "Congratulations ! Your answer was correct")
          (setf (exam-state student) :end)
          (v:log :info :data "Right answer for :token ~A" token))
@@ -656,7 +678,7 @@ The goal is ~A or more."
           (equal rich (aget (exam-answer student) "rich"))
           (equal fun (aget (exam-answer student) "fun"))
           (equal smart (aget (exam-answer student) "smart"))) ;; Good answer !
-         (setf (exam-grade student) (+ 3 (exam-grade student)))
+         (setf (exam-grade student) (+ (grade-increase) (exam-grade student)))
          (setf (exam-message student) "Congratulations ! Your answer was correct")
          (v:log :info :sat "Right answer for :token ~A" token))
         (t ;; Wrong answer !
@@ -699,7 +721,7 @@ The goal is ~A or more."
           (not (null gas))
           (within-ten-percent-of (getf (exam-answer student) :salt) salt)
           (within-ten-percent-of (getf (exam-answer student) :gas) gas));; good answer
-         (setf (exam-grade student) (+ 1 (exam-grade student)))
+         (setf (exam-grade student) (+ (grade-increase)(exam-grade student)))
          (setf (exam-message student) "Congratulations ! Your answer was correct")
          (setf (exam-state student) :end)
          (v:log :info :gas "Right answer for :token ~A" token))
