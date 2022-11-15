@@ -1,0 +1,10 @@
+# dot -T png < standard.dot > standard.png
+digraph G {
+a [label="Q and A"];
+b [label="Challenge"];
+c [label="Challenge review"];
+d [label="Lecture"];
+a->b;
+b->c;
+c->d;
+}
