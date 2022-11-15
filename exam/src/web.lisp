@@ -200,15 +200,15 @@ I just don't want the code to be executed again on app reload")
          ;;   (setf (exam-challenge student) challenge)
          ;;   (setf (exam-answer student) answer))
          ;; Exam 1
-         ;; (setf (exam-state student) :simonsays)
-         ;; (multiple-value-bind (challenge answer) (simonsays 1000)
-         ;;   (setf (exam-challenge student) challenge)
-         ;;   (setf (exam-answer student) answer))
+         (setf (exam-state student) :drawer)
+          (multiple-value-bind (challenge answer) (drawer)
+            (setf (exam-challenge student) challenge)
+            (setf (exam-answer student) answer))
          ;; Exam 2
-         (setf (exam-state student) :sat)
-         (multiple-value-bind (challenge answer) (sat)
-           (setf (exam-challenge student) challenge)
-           (setf (exam-answer student) answer))
+         ;; (setf (exam-state student) :sat)
+         ;;(multiple-value-bind (challenge answer) (sat)
+         ;;  (setf (exam-challenge student) challenge)
+         ;;  (setf (exam-answer student) answer))
          (setf (exam-message student) "Congratulations ! You successfully logged in.
 DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTON OF YOUR BROWSER OR YOU WON'T BE ABLE TO LOG BACK IN !")
          (save-states)
@@ -287,26 +287,37 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
                (format nil
                        "Your given answer (~A) was not even wrong. The correct answer was ~A."
                        answer
-                       (exam-answer student))))
+                       (exam-answer student)))
+         (setf (exam-state student) :simonsays)
+         (multiple-value-bind (challenge answer) (simonsays 1000)
+           (setf (exam-challenge student) challenge)
+           (setf (exam-answer student) answer))
+         )
         ((= (exam-answer student) answer) ;; Good answer !
          (setf (exam-message student)
                (format nil
                        "Congratulations ! Your given answer (~A) was right."
                        answer))
          (setf (exam-grade student) (+ 1 (exam-grade student)))
-         (v:log :info :simonsays "Right answer for :token ~A" token))
+         (v:log :info :simonsays "Right answer for :token ~A" token)
+         (setf (exam-state student) :end)
+         )
         ((/= (exam-answer student) answer) ;; Wrong answer !
          (v:log :info :simonsays "Wrong answer for :token ~A" token)
          (setf (exam-message student)
                (format nil
                        "You given answer (~A) was wrong. The correct answer was ~A."
                        answer
-                       (exam-answer student)))))
+                       (exam-answer student)))
+         (setf (exam-state student) :simonsays)
+         (multiple-value-bind (challenge answer) (simonsays 1000)
+           (setf (exam-challenge student) challenge)
+           (setf (exam-answer student) answer))))
+
       ;; Generate a new problem
       ;; (multiple-value-bind (challenge answer) (collatz)
       ;;   (setf (exam-challenge student) challenge)
       ;;   (setf (exam-answer student) answer))
-      (setf (exam-state student) :end)
       (save-states)
       student)))
 
@@ -423,23 +434,28 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
                        "You given answer (~A) was not even wrong. The correct answer was ~A."
                        answer
                        (exam-answer student)))
+         (setf (exam-state student) :collatz)
+         (multiple-value-bind (challenge answer) (collatz)
+           (setf (exam-challenge student) challenge)
+           (setf (exam-answer student) answer))
          (v:log :info :collatz "Invalid answer ~A for :token ~A" answer token))
         ((= (exam-answer student) answer) ;; Good answer !
          (v:log :info :collatz "Right answer for :token ~A" token)
          (setf (exam-grade student) (+ 1 (exam-grade student)))
-         (setf (exam-message student) "Congratulations ! Your answer was right."))
+         (setf (exam-message student) "Congratulations ! Your answer was right.")
+         (setf (exam-state student) :end))
         ((/= (exam-answer student) answer) ;; Wrong answer !
          (v:log :info :collatz "Wrong answer for :token ~A" token)
          (setf (exam-message student)
                (format nil
                        "You given answer (~A) was wrong. The correct answer was ~A."
                        answer
-                       (exam-answer student)))))
-      ;; Generate a new problem
-      (multiple-value-bind (challenge answer) (icecream 1000)
-        (setf (exam-challenge student) challenge)
-        (setf (exam-answer student) answer))
-      (setf (exam-state student) :end)
+                       (exam-answer student)))
+         (setf (exam-state student) :collatz)
+         (multiple-value-bind (challenge answer) (collatz)
+           (setf (exam-challenge student) challenge)
+           (setf (exam-answer student) answer))
+         ))
       (save-states)
       student)))
 
@@ -489,7 +505,7 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
                        "You given answer (~A) was not even wrong. The correct answer was ~A. Try again"
                        answer
                        (exam-answer student)))
-         (multiple-value-bind (challenge answer) (icecream 1000)
+         (multiple-value-bind (challenge answer) (icecream)
            (setf (exam-state student) :data)
            (setf (exam-challenge student) challenge)
            (setf (exam-answer student) answer))
@@ -506,7 +522,7 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
                        "You given answer (~A) was wrong. The correct answer was ~A."
                        answer
                        (exam-answer student)))
-         (multiple-value-bind (challenge answer) (icecream 1000)
+         (multiple-value-bind (challenge answer) (icecream)
            (setf (exam-state student) :data)
            (setf (exam-challenge student) challenge)
            (setf (exam-answer student) answer))))
