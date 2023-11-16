@@ -119,9 +119,11 @@ I just don't want the code to be executed again on app reload")
                                             :grade ,(exam-grade state)
                                             :message ,(exam-message state)
                                             :challenge ,(exam-challenge state))))
-    (:huge-drawer   (render #P"huge-drawer.html" `(:token ,(exam-token state)
-                                                   :grade ,(exam-grade state)
-                                                   :message ,(exam-message state))))
+    (:collatz   (render #P"collatz.html" `(:token ,(exam-token state)
+                                           :grade ,(exam-grade state)
+                                           :message ,(exam-message state)
+                                           :challenge ,(exam-challenge state)
+                                           :answer ,(exam-answer state))))
     (:drawer   (render #P"drawer.html" `(:token ,(exam-token state)
                                          :grade ,(exam-grade state)
                                          :message ,(exam-message state)
@@ -130,11 +132,29 @@ I just don't want the code to be executed again on app reload")
                                                            (nth 1 (exam-challenge state)))
                                          :leeway ,(nth 2 (exam-challenge state))
                                          :answer ,(exam-answer state))))
-    (:collatz   (render #P"collatz.html" `(:token ,(exam-token state)
-                                           :grade ,(exam-grade state)
-                                           :message ,(exam-message state)
-                                           :challenge ,(exam-challenge state)
-                                           :answer ,(exam-answer state))))
+    (:huge-drawer   (render #P"huge-drawer.html" `(:token ,(exam-token state)
+                                                   :grade ,(exam-grade state)
+                                                   :message ,(exam-message state))))
+    (:gas (render
+           #P"gas.html"
+           `(:token ,(exam-token state)
+             :grade ,(exam-grade state)
+             :message ,(exam-message state)
+             :gas-price ,(getf (exam-challenge state) :gas-price)
+             :salt-price ,(getf (exam-challenge state) :salt-price)
+             :n ,(getf (exam-challenge state) :n)
+             :h ,(getf (exam-challenge state) :h)
+             :cl ,(getf (exam-challenge state) :cl)
+             )))
+    (:sat (render
+           #P"sat.html"
+           `(:token ,(exam-token state)
+             :grade ,(exam-grade state)
+             :message ,(exam-message state)
+             :quality-0 ,(elt (exam-challenge state) 0)
+             :quality-1 ,(elt (exam-challenge state) 1)
+             :quality-2 ,(elt (exam-challenge state) 2)
+             :quality-3 ,(elt (exam-challenge state) 3))))
     (:data (render #P"data.html" `(:token ,(exam-token state)
                                    :grade ,(exam-grade state)
                                    :message ,(exam-message state)
@@ -159,26 +179,6 @@ I just don't want the code to be executed again on app reload")
                 :lead-nb ,(- 51 (bandit-hleft (car (exam-challenge state))))
                 :csv ,(bandit->csv (car (exam-challenge state)))
                 :benchmark ,(bandit-benchmark (car (exam-challenge state))))))
-    (:sat (render
-           #P"sat.html"
-           `(:token ,(exam-token state)
-             :grade ,(exam-grade state)
-             :message ,(exam-message state)
-             :quality-0 ,(elt (exam-challenge state) 0)
-             :quality-1 ,(elt (exam-challenge state) 1)
-             :quality-2 ,(elt (exam-challenge state) 2)
-             :quality-3 ,(elt (exam-challenge state) 3))))
-    (:gas (render
-           #P"gas.html"
-           `(:token ,(exam-token state)
-             :grade ,(exam-grade state)
-             :message ,(exam-message state)
-             :gas-price ,(getf (exam-challenge state) :gas-price)
-             :salt-price ,(getf (exam-challenge state) :salt-price)
-             :n ,(getf (exam-challenge state) :n)
-             :h ,(getf (exam-challenge state) :h)
-             :cl ,(getf (exam-challenge state) :cl)
-             )))
     (:end (render #P"end.html"
                   `(:grade ,(exam-grade state)
                     :message ,(exam-message state))))
@@ -188,6 +188,63 @@ I just don't want the code to be executed again on app reload")
 
 ;;
 ;; State transitions
+
+(defun genproblem (student problem)
+  "Generate a new problem for the given student.
+Student is modified. State is saved on disk. Return the edited student. Student
+ is modified."
+  (case problem
+    (:copypaste
+     (multiple-value-bind (challenge answer) (exam.challenges::copypaste)
+       (setf (exam-challenge student) challenge)
+       (setf (exam-answer student) answer)
+       (setf (exam-state student) :copypaste)))
+    (:simonsays
+     (multiple-value-bind (challenge answer) (simonsays 1000)
+       (setf (exam-state student) :simonsays)
+       (setf (exam-challenge student) challenge)
+       (setf (exam-answer student) answer)))
+    (:collatz
+     (multiple-value-bind (challenge answer) (collatz)
+       (setf (exam-challenge student) challenge)
+       (setf (exam-answer student) answer)
+       (setf (exam-state student) :collatz)))
+    (:drawer
+     (multiple-value-bind (challenge answer) (drawer)
+       (setf (exam-state student) :drawer)
+       (setf (exam-challenge student) challenge)
+       (setf (exam-answer student) answer)))
+    (:huge-drawer
+     (setf (exam-state student) :huge-drawer))
+    (:gas
+     (multiple-value-bind (challenge answer) (gas)
+       (setf (exam-state student) :gas)
+       (setf (exam-challenge student) challenge)
+       (setf (exam-answer student) answer)))
+    (:sat
+     (multiple-value-bind (challenge answer) (sat)
+       (setf (exam-state student) :sat)
+       (setf (exam-challenge student) challenge)
+       (setf (exam-answer student) answer)))
+    (:data
+     (multiple-value-bind (challenge answer) (icecream)
+       (setf (exam-state student) :data)
+       (setf (exam-challenge student) challenge)
+       (setf (exam-answer student) answer)))
+    (:training-bandit
+     (progn
+       (setf (exam-state student) :training-bandit)
+       (setf (exam-challenge student) (exam-training-bandit 30))))
+    (:bandit
+     (progn
+       (setf (exam-state student) :bandit)
+       (setf (exam-challenge student) `(,(exam-bandit 50) 0))
+       (setf (exam-message student) "Good luck !")))
+    (:end
+     (setf (exam-state student) :end))
+    (otherwise (error (format nil "Unkown problem ~A" problem))))
+  (save-states)
+  student)
 
 (defun login (token name id)
   "Check credentials and register the user as having logged in"
@@ -215,31 +272,20 @@ I just don't want the code to be executed again on app reload")
         (t
          (setf (exam-token student) token)
          (setf (exam-name student) name)
-         ;; Exam 0
-         ;; (setf (exam-grade student) 0)
-         ;; (setf (exam-state student) :copypaste)
-         ;; (multiple-value-bind (challenge answer) (exam.challenges::copypaste)
-         ;;   (setf (exam-challenge student) challenge)
-         ;;   (setf (exam-answer student) answer))
-         ;; Exam 1
-         ;;(setf (exam-state student) :drawer)
-          (multiple-value-bind (challenge answer) (drawer)
-            (setf (exam-challenge student) challenge)
-            (setf (exam-answer student) answer))
-         ;; Exam 2
-         ;; (setf (exam-state student) :sat)
-         ;;(multiple-value-bind (challenge answer) (sat)
-         ;;  (setf (exam-challenge student) challenge)
-         ;;  (setf (exam-answer student) answer))
+         (when (not (exam-grade student))
+           (setf (exam-grade student) 0))
+         (setf (exam-grade student) 0)
          (setf (exam-message student) "Congratulations ! You successfully logged in.
 DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTON OF YOUR BROWSER OR YOU WON'T BE ABLE TO LOG BACK IN !")
-         (save-states)
+         (genproblem student :copypaste)
          (v:log :info :login "Successful login for :token ~A :name ~A :id ~A"
                 token name id)
          student)))))
 
 (defun validate-copypaste (answer token)
   "Check the answer and move to the next challenge"
+  (format t "Given answer is ~A, parsed as ~A"
+         answer (parse-integer answer :junk-allowed t) )
   (with-lock-held (*lock*)
     (let ((student (by-token token))
           (answer (parse-integer answer :junk-allowed t)))
@@ -262,27 +308,24 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
                (format nil
                        "Your given answer (~A) was not even wrong. The correct answer was ~A."
                        answer
-                       (exam-answer student))))
+                       (exam-answer student)))
+         (genproblem student :copypaste))
         ((= (exam-answer student) answer) ;; Good answer !
          (setf (exam-message student)
                (format nil
                        "Congratulations ! Your given answer (~A) was right."
                        answer))
          (setf (exam-grade student) (+ (grade-increase) (exam-grade student)))
-         (v:log :info :copypaste "Right answer for :token ~A" token))
+         (v:log :info :copypaste "Right answer for :token ~A" token)
+         (genproblem student :simonsays))
         ((/= (exam-answer student) answer) ;; Wrong answer !
          (v:log :info :copypaste "Wrong answer for :token ~A" token)
          (setf (exam-message student)
                (format nil
                        "You given answer (~A) was wrong. The correct answer was ~A."
                        answer
-                       (exam-answer student)))))
-      ;; ;; Generate a new problem
-      ;; (multiple-value-bind (challenge answer) (collatz)
-      ;;   (setf (exam-challenge student) challenge)
-      ;;   (setf (exam-answer student) answer))
-      (setf (exam-state student) :end)
-      (save-states)
+                       (exam-answer student)))
+         (genproblem student :copypaste)))
       student)))
 
 (defun validate-simonsays (answer token)
@@ -310,11 +353,7 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
                        "Your given answer (~A) was not even wrong. The correct answer was ~A."
                        answer
                        (exam-answer student)))
-         (setf (exam-state student) :simonsays)
-         (multiple-value-bind (challenge answer) (simonsays 1000)
-           (setf (exam-challenge student) challenge)
-           (setf (exam-answer student) answer))
-         )
+         (genproblem student :simonsays))
         ((= (exam-answer student) answer) ;; Good answer !
          (setf (exam-message student)
                (format nil
@@ -322,8 +361,7 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
                        answer))
          (setf (exam-grade student) (+ (grade-increase) (exam-grade student)))
          (v:log :info :simonsays "Right answer for :token ~A" token)
-         (setf (exam-state student) :end)
-         )
+         (genproblem student :collatz))
         ((/= (exam-answer student) answer) ;; Wrong answer !
          (v:log :info :simonsays "Wrong answer for :token ~A" token)
          (setf (exam-message student)
@@ -331,23 +369,14 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
                        "You given answer (~A) was wrong. The correct answer was ~A."
                        answer
                        (exam-answer student)))
-         (setf (exam-state student) :simonsays)
-         (multiple-value-bind (challenge answer) (simonsays 1000)
-           (setf (exam-challenge student) challenge)
-           (setf (exam-answer student) answer))))
-
-      ;; Generate a new problem
-      ;; (multiple-value-bind (challenge answer) (collatz)
-      ;;   (setf (exam-challenge student) challenge)
-      ;;   (setf (exam-answer student) answer))
-      (save-states)
+         (genproblem student :simonsays)))
       student)))
 
-(defun validate-huge-drawer (answer token)
-  "Check the answer and either move to next challenge or back to the same huge drawer"
+(defun validate-collatz (answer token)
+  "Check the answer and either move to next challenge or back to another collatz"
   (with-lock-held (*lock*)
     (let ((student (by-token token))
-          (answer (parse-huge-drawer-solution answer)))
+          (answer (parse-integer answer :junk-allowed t)))
       (cond
         ((not student) ;; There is no registered student with this token
          (let ((message
@@ -355,31 +384,33 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
                   nil
                   "Invalid creds (bad token) :token ~A"
                   token)))
-           (v:log :warn :huge-drawer message)
+           (v:log :warn :collatz message)
            (error message)))
-        ((string/= (exam-state student) :huge-drawer)  ;;Why the fuck would they post on /drawer, then ?
+        ((string/= (exam-state student) :collatz)  ;;Why the fuck would they post on /collatz, then ?
          (let ((message (format nil "State was ~A for token ~A" (exam-state student) token)))
-           (v:log :warn :huge-drawer message)
+           (v:log :warn :collatz message)
            (error message)))
         ((not answer) ;; Not even wrong
          (setf (exam-message student)
                (format nil
-                       "I was not able to parse your given answer (~A)."
-                       answer))
-         (v:log :info :drawer "Invalid answer ~A for :token ~A" answer token))
-        ((huge-drawer-validp answer) ;; Good answer !
-         (v:log :info :drawer "Right answer for :token ~A" token)
-         (setf (exam-grade student) (+ (grade-increase) (exam-grade student)))
+                       "You given answer (~A) was not even wrong. The correct answer was ~A."
+                       answer
+                       (exam-answer student)))
+         (v:log :info :collatz "Invalid answer ~A for :token ~A" answer token)
+         (genproblem student :collatz))
+        ((= (exam-answer student) answer) ;; Good answer !
+         (v:log :info :collatz "Right answer for :token ~A" token)
+         (setf (exam-grade student) (+ (grade-increase)(exam-grade student)))
          (setf (exam-message student) "Congratulations ! Your answer was right.")
-         (setf (exam-state student) :end))
-        ((not (huge-drawer-validp answer)) ;; Wrong answer !
-         (v:log :info :drawer "Wrong answer for :token ~A" token)
+         (genproblem student :drawer))
+        ((/= (exam-answer student) answer) ;; Wrong answer !
+         (v:log :info :collatz "Wrong answer for :token ~A" token)
          (setf (exam-message student)
                (format nil
-                       "You given answer:<br/>
-<pre>~A</pre><br/> was wrong."
-                       answer))))
-      (save-states)
+                       "You given answer (~A) was wrong. The correct answer was ~A."
+                       answer
+                       (exam-answer student)))
+         (genproblem student :collatz)))
       student)))
 
 (defun validate-drawer (answer token)
@@ -406,16 +437,13 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
                        "I was not able to parse your given answer (~A) . The correct answer was <pre>~A</pre>."
                        answer
                        (format-drawer-solution (exam-answer student))))
-         ;; Generate a new problem
-         (multiple-value-bind (challenge answer) (drawer)
-           (setf (exam-challenge student) challenge)
-           (setf (exam-answer student) answer))
-         (v:log :info :drawer "Invalid answer ~A for :token ~A" answer token))
+         (v:log :info :drawer "Invalid answer ~A for :token ~A" answer token)
+         (genproblem student :drawer))
         ((seteql (exam-answer student) answer :test #'equal) ;; Good answer !
          (v:log :info :drawer "Right answer for :token ~A" token)
          (setf (exam-grade student) (+ (grade-increase)(exam-grade student)))
          (setf (exam-message student) "Congratulations ! Your answer was right.")
-         (setf (exam-state student) :end))
+         (genproblem student :huge-drawer))
         ((not (seteql (exam-answer student) answer :test #'equal)) ;; Wrong answer !
          (v:log :info :drawer "Wrong answer for :token ~A" token)
          (setf (exam-message student)
@@ -424,19 +452,14 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
 <pre>~A</pre><br/> was wrong. The correct answer was:<br/><pre>~A</pre>."
                        (format-drawer-solution answer)
                        (format-drawer-solution (exam-answer student))))
-         ;; Generate a new problem
-         (multiple-value-bind (challenge answer) (drawer)
-           (setf (exam-challenge student) challenge)
-           (setf (exam-answer student) answer))))
-      (save-states)
+         (genproblem student :drawer)))
       student)))
 
-
-(defun validate-collatz (answer token)
-  "Check the answer and either move to next challenge or back to another collatz"
+(defun validate-huge-drawer (answer token)
+  "Check the answer and either move to next challenge or back to the same huge drawer"
   (with-lock-held (*lock*)
     (let ((student (by-token token))
-          (answer (parse-integer answer :junk-allowed t)))
+          (answer (parse-huge-drawer-solution answer)))
       (cond
         ((not student) ;; There is no registered student with this token
          (let ((message
@@ -444,41 +467,112 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
                   nil
                   "Invalid creds (bad token) :token ~A"
                   token)))
-           (v:log :warn :collatz message)
+           (v:log :warn :huge-drawer message)
            (error message)))
-        ((string/= (exam-state student) :collatz)  ;;Why the fuck would they post on /collatz, then ?
+        ((string/= (exam-state student) :huge-drawer)  ;;Why the fuck would they post on /drawer, then ?
          (let ((message (format nil "State was ~A for token ~A" (exam-state student) token)))
-           (v:log :warn :collatz message)
+           (v:log :warn :huge-drawer message)
            (error message)))
         ((not answer) ;; Not even wrong
          (setf (exam-message student)
                (format nil
-                       "You given answer (~A) was not even wrong. The correct answer was ~A."
-                       answer
-                       (exam-answer student)))
-         (setf (exam-state student) :collatz)
-         (multiple-value-bind (challenge answer) (collatz)
-           (setf (exam-challenge student) challenge)
-           (setf (exam-answer student) answer))
-         (v:log :info :collatz "Invalid answer ~A for :token ~A" answer token))
-        ((= (exam-answer student) answer) ;; Good answer !
-         (v:log :info :collatz "Right answer for :token ~A" token)
-         (setf (exam-grade student) (+ (grade-increase)(exam-grade student)))
+                       "I was not able to parse your given answer (~A)."
+                       answer))
+         (v:log :info :drawer "Invalid answer ~A for :token ~A" answer token)
+         (genproblem student :huge-drawer))
+        ((huge-drawer-validp answer) ;; Good answer !
+         (v:log :info :drawer "Right answer for :token ~A" token)
+         (setf (exam-grade student) (+ (grade-increase) (exam-grade student)))
          (setf (exam-message student) "Congratulations ! Your answer was right.")
-         (setf (exam-state student) :end))
-        ((/= (exam-answer student) answer) ;; Wrong answer !
-         (v:log :info :collatz "Wrong answer for :token ~A" token)
+         (genproblem student :gas))
+        ((not (huge-drawer-validp answer)) ;; Wrong answer !
+         (v:log :info :drawer "Wrong answer for :token ~A" token)
          (setf (exam-message student)
                (format nil
-                       "You given answer (~A) was wrong. The correct answer was ~A."
-                       answer
-                       (exam-answer student)))
-         (setf (exam-state student) :collatz)
-         (multiple-value-bind (challenge answer) (collatz)
-           (setf (exam-challenge student) challenge)
-           (setf (exam-answer student) answer))
-         ))
-      (save-states)
+                       "You given answer:<br/>
+<pre>~A</pre><br/> was wrong."
+                       answer))
+         (genproblem student :huge-drawer)))
+      student)))
+
+(defun validate-gas (salt gas token)
+  "Validate the answer to the lp challenge before moving on"
+  (with-lock-held (*lock*)
+    (let ((student (by-token token))
+          (gas (parse-integer gas :junk-allowed t))
+          (salt (parse-integer salt :junk-allowed t)))
+      (cond
+        ((not student) ;; There is no registered student with this token
+         (let ((message
+                 (format
+                  nil
+                  "Invalid creds (bad token) :token ~A"
+                  token)))
+           (v:log :warn :gas message)
+           (error message)))
+        ((string/= (exam-state student) :gas)  ;;Why the fuck would they post on /sat, then ?
+         (let ((message (format nil "State was ~A for token ~A" (exam-state student) token)))
+           (v:log :warn :gas message)
+           (error message)))
+        ((and
+          (not (null salt))
+          (not (null gas))
+          (within-ten-percent-of (getf (exam-answer student) :salt) salt)
+          (within-ten-percent-of (getf (exam-answer student) :gas) gas));; good answer
+         (setf (exam-grade student) (+ (grade-increase)(exam-grade student)))
+         (setf (exam-message student) "Congratulations ! Your answer was correct")
+         (v:log :info :gas "Right answer for :token ~A" token)
+         (genproblem student :sat))
+        (t ;; Wrong answer !
+         (v:log :info :gas "Wrong answer for :token ~A" token)
+         (setf (exam-message student)
+               (format nil "Your answer (salt ~A, gas ~A) was wrong,
+ the correct answer was salt: ~A, gas ~A."
+                       salt gas
+                       (getf (exam-answer student) :salt)
+                       (getf (exam-answer student) :gas)))
+         (genproblem student :gas)))
+      student)))
+
+(defun validate-sat (happy rich fun smart token)
+  "Validate the answer to the sat challenge before moving on"
+  (with-lock-held (*lock*)
+    (let ((student (by-token token)))
+      (cond
+        ((not student) ;; There is no registered student with this token
+         (let ((message
+                 (format
+                  nil
+                  "Invalid creds (bad token) :token ~A"
+                  token)))
+           (v:log :warn :sat message)
+           (error message)))
+        ((string/= (exam-state student) :sat)  ;;Why the fuck would they post on /sat, then ?
+         (let ((message (format nil "State was ~A for token ~A" (exam-state student) token)))
+           (v:log :warn :sat message)
+           (error message)))
+        ((and
+          (equal happy (aget (exam-answer student) "happy"))
+          (equal rich (aget (exam-answer student) "rich"))
+          (equal fun (aget (exam-answer student) "fun"))
+          (equal smart (aget (exam-answer student) "smart"))) ;; Good answer !
+         (setf (exam-grade student) (+ (grade-increase) (exam-grade student)))
+         (setf (exam-message student) "Congratulations ! Your answer was correct")
+         (v:log :info :sat "Right answer for :token ~A" token)
+         (genproblem student :data))
+        (t ;; Wrong answer !
+         (v:log :info :sat "Received value for happy ~A" happy)
+         (v:log :info :sat "Received value for rich ~A" rich)
+         (v:log :info :sat "Received value for fun ~A" fun)
+         (v:log :info :sat "Received value for smart ~A" smart)
+         (v:log :info :sat "Expected value for happy ~A" (aget (exam-answer student) "happy"))
+         (v:log :info :sat "Expected value for rich ~A" (aget (exam-answer student) "rich"))
+         (v:log :info :sat "Expected value for fun ~A" (aget (exam-answer student) "fun"))
+         (v:log :info :sat "Expected value for smart ~A" (aget (exam-answer student) "smart"))
+         (v:log :info :sat "Wrong answer for :token ~A" token)
+         (setf (exam-message student)
+               "You given answer was wrong.")
+         (genproblem student :sat)))
       student)))
 
 (defun atof (s)
@@ -527,16 +621,12 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
                        "You given answer (~A) was not even wrong. The correct answer was ~A. Try again"
                        answer
                        (exam-answer student)))
-         (multiple-value-bind (challenge answer) (icecream)
-           (setf (exam-state student) :data)
-           (setf (exam-challenge student) challenge)
-           (setf (exam-answer student) answer))
-         )
+         (genproblem student :data))
         ((within-ten-percent-of (exam-answer student) answer) ;; Good answer !
          (setf (exam-grade student) (+ (grade-increase)(exam-grade student)))
          (setf (exam-message student) "Congratulations ! Your answer was correct")
-         (setf (exam-state student) :end)
-         (v:log :info :data "Right answer for :token ~A" token))
+         (v:log :info :data "Right answer for :token ~A" token)
+         (genproblem student :training-bandit))
         (t ;; Wrong answer !
          (v:log :info :data "Wrong answer for :token ~A" token)
          (setf (exam-message student)
@@ -544,11 +634,7 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
                        "You given answer (~A) was wrong. The correct answer was ~A."
                        answer
                        (exam-answer student)))
-         (multiple-value-bind (challenge answer) (icecream)
-           (setf (exam-state student) :data)
-           (setf (exam-challenge student) challenge)
-           (setf (exam-answer student) answer))))
-      (save-states)
+         (genproblem student :data)))
       student)))
 
 (defun training-pull (arm token)
@@ -570,12 +656,8 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
            (v:log :warn :training-bandit message)
            (error message)))
         ((not arm) ;; arm was not an int, therefore it was "Go", and we move on to the actual bandit
-         (setf (exam-state student) :bandit)
-         (setf (exam-challenge student) `(,(exam-bandit 50) 0))
-         (setf (exam-message student) "Good luck !")
-         (save-states)
          (v:log :info :training-bandit ":token ~A moved on to the real bandit" token)
-         student)
+         (genproblem student :bandit))
         (t ;; The answer is now an int, we just have to pull the arm
          (multiple-value-bind (challenge last-result) (pull-arm (exam-challenge student) arm)
            (setf (exam-challenge student) challenge)
@@ -584,6 +666,7 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
                      (format nil "The sales lead <strong>became</strong> a customer :)" )
                      (format nil "The sales lead <strong>refused</strong> to become a customer :'(")))
            (v:log :info :training-bandit ":token ~A pulled arm ~A with result ~A" token arm last-result))
+         (save-states)
          (when (= 0 (bandit-hleft (exam-challenge student)))
            ;; Exhausted all sales lead, give feedback and create a new training challenge
            (progn
@@ -592,9 +675,8 @@ DO NOT CLOSE THE TAB OR WINDOW AND DO NOT FIDDLE WITH THE BACK AND FORWARD BUTTO
 To get any credit, you should aim for an average of ~A or more."
                           (bandit-reward (exam-challenge student))
                           (bandit-benchmark (exam-challenge student))))
-            (setf (exam-challenge student) (exam-training-bandit 30))))
-         (save-states)
-         student)))))
+            (genproblem student :training-bandit)))))
+      student)))
 
 (defun bandit-grade (reward benchmark)
   "Return some credit depending on the student performance"
@@ -632,6 +714,7 @@ To get any credit, you should aim for an average of ~A or more."
                      (format nil "The sales lead <strong>became</strong> a customer :)" )
                      (format nil "The sales lead <strong>refused</strong> to become a customer :'(")))
            (v:log :info :bandit ":token ~A pulled arm ~A with result ~A" token arm last-result))
+         (save-states)
          (when (= 0 (bandit-hleft (car (exam-challenge student))))
            ;; Exhausted all sales lead, give feedback and create a new training challenge
            ;; if there are any trials left
@@ -648,104 +731,21 @@ The goal is ~A or more."
             (let ((trials-left (cadr (exam-challenge student))))
               (when (= 0 trials-left)
                 (v:log :info :bandit ":token ~A finished all their trials" token)
-                (setf (exam-state student) :end)))))))
-      (save-states)
+                (genproblem student :end)))))))
       student)))
 
 (defun aget (l k)
   "Return the value associated with l in alist l whose keys are strings"
   (car (alexandria:assoc-value l k :test 'equal)))
 
-(defun validate-sat (happy rich fun smart token)
-  "Validate the answer to the sat challenge before moving on"
-  (with-lock-held (*lock*)
-    (let ((student (by-token token)))
-      (cond
-        ((not student) ;; There is no registered student with this token
-         (let ((message
-                 (format
-                  nil
-                  "Invalid creds (bad token) :token ~A"
-                  token)))
-           (v:log :warn :sat message)
-           (error message)))
-        ((string/= (exam-state student) :sat)  ;;Why the fuck would they post on /sat, then ?
-         (let ((message (format nil "State was ~A for token ~A" (exam-state student) token)))
-           (v:log :warn :sat message)
-           (error message)))
-        ((and
-          (equal happy (aget (exam-answer student) "happy"))
-          (equal rich (aget (exam-answer student) "rich"))
-          (equal fun (aget (exam-answer student) "fun"))
-          (equal smart (aget (exam-answer student) "smart"))) ;; Good answer !
-         (setf (exam-grade student) (+ (grade-increase) (exam-grade student)))
-         (setf (exam-message student) "Congratulations ! Your answer was correct")
-         (v:log :info :sat "Right answer for :token ~A" token))
-        (t ;; Wrong answer !
-         (v:log :info :sat "Received value for happy ~A" happy)
-         (v:log :info :sat "Received value for rich ~A" rich)
-         (v:log :info :sat "Received value for fun ~A" fun)
-         (v:log :info :sat "Received value for smart ~A" smart)
-         (v:log :info :sat "Expected value for happy ~A" (aget (exam-answer student) "happy"))
-         (v:log :info :sat "Expected value for rich ~A" (aget (exam-answer student) "rich"))
-         (v:log :info :sat "Expected value for fun ~A" (aget (exam-answer student) "fun"))
-         (v:log :info :sat "Expected value for smart ~A" (aget (exam-answer student) "smart"))
-         (v:log :info :sat "Wrong answer for :token ~A" token)
-         (setf (exam-message student)
-               "You given answer was wrong.")))
-      (setf (exam-state student) :huge-drawer)
-      (save-states)
-      student)))
-
-(defun validate-gas (salt gas token)
-  "Validate the answer to the lp challenge before moving on"
-  (with-lock-held (*lock*)
-    (let ((student (by-token token))
-          (gas (parse-integer gas :junk-allowed t))
-          (salt (parse-integer salt :junk-allowed t)))
-      (cond
-        ((not student) ;; There is no registered student with this token
-         (let ((message
-                 (format
-                  nil
-                  "Invalid creds (bad token) :token ~A"
-                  token)))
-           (v:log :warn :gas message)
-           (error message)))
-        ((string/= (exam-state student) :gas)  ;;Why the fuck would they post on /sat, then ?
-         (let ((message (format nil "State was ~A for token ~A" (exam-state student) token)))
-           (v:log :warn :gas message)
-           (error message)))
-        ((and
-          (not (null salt))
-          (not (null gas))
-          (within-ten-percent-of (getf (exam-answer student) :salt) salt)
-          (within-ten-percent-of (getf (exam-answer student) :gas) gas));; good answer
-         (setf (exam-grade student) (+ (grade-increase)(exam-grade student)))
-         (setf (exam-message student) "Congratulations ! Your answer was correct")
-         (setf (exam-state student) :end)
-         (v:log :info :gas "Right answer for :token ~A" token))
-        (t ;; Wrong answer !
-         (v:log :info :gas "Wrong answer for :token ~A" token)
-         (setf (exam-message student)
-               (format nil "Your answer (salt ~A, gas ~A) was wrong,
- the correct answer was salt: ~A, gas ~A."
-                       salt gas
-                       (getf (exam-answer student) :salt)
-                       (getf (exam-answer student) :gas)))
-         (setf (exam-state student) :gas)
-         (multiple-value-bind (challenge answer) (gas)
-           (setf (exam-challenge student) challenge)
-           (setf (exam-answer student) answer))))
-      (save-states)
-      student)))
-
 ;;
 ;; Routing rules
 
 (defroute ("/" :method :GET) ()
   "Getting the main page lands us in the start state"
-  (let ((state (make-exam :state :loggedout :token (make-v4-uuid))))
+  (let ((state (make-exam :state :loggedout
+                          ;; TOKEN :token (make-v4-uuid)
+                          :token "PROUT")))
     (page state)))
 
 (defroute ("/" :method :POST) (&key |token| |name| |id|)
@@ -758,6 +758,7 @@ The goal is ~A or more."
 
 (defroute ("/copypaste" :method :POST) (&key |answer| |token|)
   "Check the answer to the copypaste challenge"
+  (format t "Answer is ~A" |answer|)
   (handler-case
       (page (validate-copypaste |answer| |token|))
     (t (c)
@@ -854,3 +855,10 @@ The goal is ~A or more."
   (declare (ignore app))
   (merge-pathnames #P"_errors/404.html"
                    *template-directory*))
+
+(defun out-of-twenty (g)
+       "Return a grade out of twenty from the exam grade g (school year 22/23)"
+       (cond
+         ((>= g 7) (min 20 (+ 18 (* (/ (- g 7) 3) 2))))
+         ((>= g 5) (+ 11 (* (/ (- g 5) 2) 7)))
+         (t (* (/ g 5) 11))))
