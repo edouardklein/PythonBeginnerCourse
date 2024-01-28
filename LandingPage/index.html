@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hands-on Python: From Data to Business Decisions with Python</title>
+    <style>
+
+
+
+        body{
+        max-width: 1693px;
+        margin: auto;
+         font-size: 2.3vh;
+        }
+
+        #hero {
+        background-color: #f6fdff;
+        background-image: url('HeroSection.jpg') ;
+        background-size:    cover;
+        background-repeat:  no-repeat;
+        background-position:    right;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100vh;
+        }
+
+        h1 {
+        color:  #e2975d;
+        font-size: 10vh;
+        text-shadow: 2px 2px 0 rgba(0, 0, 0, .75), 0 0 2px rgba(0, 0, 0, 1);
+        margin:0;
+        }
+
+        h2 {
+        color:  #e2975d;
+        font-size: 5vh;
+        text-shadow: 1px 1px 0 rgba(0, 0, 0, .75), 0 0 1px rgba(0, 0, 0, 1);
+        }
+
+        #buttons {
+        display: flex;
+        flex-direction:     row;
+        justify-content:    space-around;
+}
+
+        #buttons a {
+        max-width: 20vw;
+        }
+
+        .emailCTA, .oooCTA {
+        background: linear-gradient(to bottom, #61969d, #61b99d);
+        border: 2px solid #61b99d;
+        }
+
+        .enrollCTA {
+        background: linear-gradient(to bottom, #e2975d, #e2ba5d);
+        border: 2px solid #e2ba5d;
+        }
+
+        #hero-content {
+        display: flex;
+        font-size: 3vh;
+        align-items: flex-end;  /* Needed to avoid girl image stretching */
+        max-width: 82%;
+        }
+#hero-content img {
+        max-height: 60vh;
+}
+        #hero-left-column{
+        display: flex;
+        flex-direction: column;
+        justify-content: safe flex-end;
+        height: 100%;
+        }
+        .emph {
+        font-weight: bold;
+        color: #63352d;
+        font-size: larger;
+        /*   text-shadow: 1px 1px 0 rgba(0, 0, 0, .75), 0 0 1px rgba(0, 0, 0, 1);*/
+
+        }
+
+        #buttons .button{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        }
+        .button {
+        color: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-size: 2vh;
+        font-weight: bold;
+        text-align:center;
+        cursor: pointer;
+        transition: all ease-in-out 0.1s;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+        }
+
+        .button:hover {
+        transform: scale(1.05);
+        }
+
+        button:active {
+        transform: scale(1);
+        }
+
+        html {
+        scroll-behavior: smooth;
+        }
+
+        table {
+        width: 100%;
+        border-collapse: collapse;
+        }
+        th, td {
+        padding: 10px;
+        text-align: left;
+                font-size: 2.5vh;
+        }
+        th{
+        border-bottom: 1px solid #04527f;
+        background-color:  #fff7cc;
+        }
+        tfoot th {
+            border-bottom: 0;
+            border-top: 1px solid #04527f;
+        }
+.rh {
+        border-right: 1px solid #04527f;
+}
+        th, .rh, dt {
+        color: #04527f;
+        font-size: 3vh;
+        }
+
+        .morning {
+        background-color: #b2d8ff;
+        }
+
+        .afternoon, .even {
+        background-color: #ffecdd;
+        }
+
+        .afterning {
+        background-color:  #fff7cc;
+        }
+
+        .post-hero {
+        width: 80vw;
+        margin:auto;
+        }
+
+.sidebyside img {
+        max-width: 20vw;
+        float: left;
+        margin-right: 3vw;
+}
+.sidebyside img.right {
+        float:right;
+        margin-left:3vw;
+        margin-right:0;
+        }
+
+#bio img {
+        max-width: 10vw;}
+.post-hero::after { /*"clearfix": prevent floats to float past the section end,
+        see https://stackoverflow.com/questions/211383/what-methods-of-clearfix-can-i-use*/
+         content: "";
+  display: block;
+  clear: both;
+}
+
+#price th {
+        text-align:right;
+        }
+                                                                                                                                                                                                                                                                                                                                                                                                 </style>
+</head>
+<body>
+    <section id="hero">
+        <h1>Hands-on Python: From Data to Business Decisions with Python</h1>
+        <section id="buttons">
+            <a class="button emailCTA" href="#email">Give us your email to be notified when a new session opens</a>
+            <a class="button enrollCTA" href="#pricing"><span>Our next session starts on February 26th, only 4 seats left, <span class="emph">enroll now !</span></span></a>
+            <a class="button oooCTA" href="#ooo">Schedule a free 15 minutes one-on-one with your instructor to see if the course is a good fit for your situation</a>
+        </section>
+        <section id="hero-content">
+            <section id="hero-left-column">
+                <p><span class="emph">Switch fields</span>
+                    or <span class="emph">improve your career</span> by learning
+                    how to analyze data in Python, and take measurably better
+                    business decisions. No prior programming experience
+                    required! Step up from basic computer knowledge, and unlock
+                        the power of Python&apos;s open source ecosystem.</p>
+                <ul>
+                    <li>Optimize business processes: logistics, planning, resource allocation (e.g. classroom/teacher/timeslot)</li>
+                    <li>Fetch, clean, analyze, and export data to and from the web, business applications, databases, excel sheets...</li>
+                    <li>Generate dashboards and reports; compute business metrics</li>
+                    <li>Find the required information about Python and keep up to date with the latest developments,
+                        using search engines and Large Language Models such as GPT.</li>
+                </ul>
+                <p>Join a small cohort (10 person max!) of students, and get personalized feedback
+                    and 1-on-1 time with your instructor. You may bring your own project, you will get help!</p>
+            </section>
+            <img src="Eve.png" alt="A woman looking at an apple" />
+        </section>
+    </section>
+    <section class="post-hero">
+        <h2
+            id="daily-course-structure-a-blend-of-interactive-learning-and-personalized-study">Daily
+            Course Structure: A Blend of Interactive Learning and Personalized Study</h2>
+        <table>
+            <thead>
+                <tr class="header">
+                    <th></th>
+                    <th>Monday: intro</th>
+                    <th>Tuesday: getting help</th>
+                    <th>Wednesday: data analysis</th>
+                    <th>Thursday: data import and export</th>
+                    <th>Friday: constraint optimization</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="morning">
+                    <td class="rh">AM</td>
+                    <td>Learn what is Python and how to run Python code<br/>
+                        Discover the basics of Python syntax</td>
+                    <td>Bird&apos;s eye view of Python&apos;s ecosystem<br/>
+                     Learn how to find help and unstuck yourself</td>
+                    <td>Learn data analysis and visualization<br/>
+                     Juuust a little bit of statistics</td>
+                    <td>Learn how to scrape, import and export data,<br/>
+                     Use Python to create web apps and APIs.</td>
+                    <td>Learn how to optimize business problems<br/>
+                     and allocate resources efficiently</td>
+                </tr>
+                <tr class="afternoon">
+                    <td class="rh">PM</td>
+                    <td>Challenges 1 &amp; 2<br/>
+                    office hours &amp; 1-on-1 sessions<br/>
+                    optional challenges for the best students</td>
+                    <td>Challenges 3&amp;4<br/>
+                    office hours &amp; 1-on-1 sessions<br/>
+                    optional challenges for the best students</td>
+                    <td>Challenge 5<br/>
+                    office hours &amp; 1-on-1 sessions<br/>
+                    Start of personalized project</td>
+                    <td>Challenge 6<br/>
+                    office hours &amp; 1-on-1 sessions<br/>
+                    End of personalized project</td>
+                    <td>Challenge 7<br/>
+                    office hours &amp; 1-on-1 sessions<br/>
+                    optional projects presentation</td>
+                </tr>
+            </tbody>
+        </table>
+        <section class="sidebyside">
+            <img src="Morning.jpg" alt="A Python and his furry friend teaching a class" class="right"/>
+            <dl>
+                <dt class="morning">Morning Sessions (Live Instruction)</dt>
+                <dd>
+                    Each day starts with a live, interactive
+                    session led by your instructor. These morning classes are dedicated
+                    to introducing new concepts, practical skills, and exploring Python&apos;s
+                    diverse applications. From the basics of Python syntax to advanced data
+                    analysis, you&apos;ll be actively engaged in learning core aspects of Python
+                    that are crucial for your professional development.
+                </dd>
+                <dt class="morning">Daily Debriefs</dt>
+                <dd>
+                    First thing in the morning, we start with a debrief session. This is
+                    a crucial part of your learning journey where we discuss the previous
+                    day&apos;s challenges, address common difficulties, and share insights. These
+                    debriefs are not just about problem-solving but also about fostering a
+                    collaborative learning environment where everyone&apos;s experiences
+                    contribute to the group&apos;s collective knowledge.</dd>
+            </dl>
+        </section>
+        <section class="sidebyside">
+            <img src="SelfStudy.jpg" alt="A Python helps a student">
+            <dl>
+                <dt class="afternoon">Afternoon Sessions (Self-Study with Support)</dt>
+                <dd>
+                Afternoons are your opportunity
+                for self-study, where you&apos;ll dive into challenges and exercises
+                designed to reinforce the morning&apos;s lessons. Don&apos;t worry, you&apos;re not
+                alone in this! Your instructor remains readily available throughout the
+                afternoon to answer any questions, provide clarifications, and assist
+                you in overcoming any obstacles in the challenges. This hands-on
+                approach ensures that you can apply what you&apos;ve learned effectively.
+                </dd>
+                <dt class="afternoon">Extended Office Hours</dt>
+                <dd>
+                Understanding the varied schedules and needs of our
+                students, we offer extended office hours spanning 5 to 6 hours. This
+                flexibility ensures that you can receive personalized guidance and
+                support at a time that suits you best, making the learning experience
+                adaptable to your personal and professional commitments.</dd>
+                <dt class="afternoon">Guaranteed 1 hour of 1-on-1</dt>
+                <dd>Each student walks at their own pace. Office hours are held in a collective web conference where all ten students are welcome to come and go and listen to the questions and answers, and interject with their own follow-up questions. However nothing beats undivided teacher attention. Over the course of the week, you are guaranteed to get at least one hour of cumulated 1-on-1 time alone with your instructor.</dd>
+                <dt class="afternoon">Personalized Project for Portfolio Development</dt>
+                <dd>
+                One of the unique aspects of our
+                course is the opportunity to work on a personalized project. This
+                project is your canvas to apply the skills you&apos;ve learned, either by
+                starting to build your professional portfolio or by tackling a
+                real-world problem you face in your job. It’s an excellent opportunity
+                to create something that resonates with your professional ambitions and
+                interests.</dd>
+            </dl>
+        </section>
+        <dl>
+            <dt class="afterning">Comprehensive and Interactive Course Materials</dt>
+            <dd>
+                Experience a dynamic learning
+                environment with our innovative mixed media course material. This
+                includes engaging slides, an Anki deck for spaced repetition learning,
+                practical Jupyter notebooks, andaccess to a shared Jupyter server,
+                ensuring a hands-on experience. We also provide curated links to
+                beginner-friendly resources, guiding you every step of the way. This
+                rich blend of materials caters to different learning styles and enhances
+                your understanding of Python.</dd>
+            <dt class="afterning">Lifetime Access</dt>
+            <dd>
+                Once you enroll in our course, the learning doesn&apos;t stop at
+                the end of the week. You gain lifetime access to all course materials
+                – slides, Jupyter notebooks, Anki decks, and more. This means you can
+                continue to refresh your knowledge and skills long after the course has
+                ended. Our commitment is to provide enduring value, supporting your
+                continuous learning journey in Python.
+            </dd>
+        </dl>
+
+        <p>This structured yet flexible approach ensures that you not only learn
+            Python theoretically but also gain the confidence to apply it
+            practically in various contexts – be it in data analysis, automating
+            business processes, or developing your own applications.</p>
+    </section>
+    <section class="post-hero">
+        <h2 id="is-this-course-right-for-you">Is this course right for you?</h2>
+        <secion class="sidebyside">
+            <img src="journey.jpg" alt="A hiker about to engage in a mountainous path" class="right">
+            <section>
+                <p>Learning Python will open up career opportunities. First given in
+                    2016 to business school students, this course has been continuously
+                    improved to cater to a diverse range of individuals who want to switch
+                    careers, or improve their existing data analysis, automation and
+                    management skills. Find out if you&apos;re one of them!</p>
+                <ul>
+                    <li>If you&apos;re looking to pivot into a career in technology, this course
+                        serves as a foundational step. It&apos;s tailored to provide you with the
+                        skills needed to start a career in tech, even if you come from a
+                        non-technical background.</li>
+                    <li>If your goal is to enter the exciting (and lucrative) world of data
+                        science, this course will equip you with essential Python skills. You&apos;ll
+                        learn data analysis, visualization, and how to handle large datasets - a
+                        perfect stepping stone into a data science career.</li>
+                    <li>Business professionals who aim to harness data for better
+                        decision-making will find this course invaluable. You&apos;ll
+                        learn how to automate and optimize complex business processes,
+                        making your analysis more efficient and impactful.</li>
+                    <li>For those who rely on Excel for data management and want to take
+                        their skills to the next level, this course offers the
+                        opportunity to explore Python’s powerful capabilities for data
+                        analysis and automation, far beyond what&apos;s possible in
+                        traditional spreadsheet tools.</li>
+                    <li>Regardless of your current profession or level of experience with
+                        programming, if you have the desire to learn and apply Python in
+                        practical, real-world scenarios, this course is designed with you
+                        in mind. Join us to unlock new opportunities and take your
+                        professional skills to the next level.</li>
+                </ul>
+                <p>Join Our Growing Community: Upon completion of the course, you will
+                    be added to an exclusive mailing list connecting you with fellow
+                    graduates. This network is a valuable resource for continued learning,
+                    networking, job opportunities, and collaborative projects. As our
+                    community grows, so does the value it brings to each member.</p>
+            </section>
+        </secion>
+    </section>
+    <section class="post-hero">
+    <h2 id="example-projects">Example projects</h2>
+        <section class="sidebyside">
+            <img src="calendar.jpg" alt="An older woman looking for a convenient timeslot" class="right">
+            <dl>
+                <dt>Automating Meeting Schedules</dt>
+                <dd>
+                    Tired of the endless back-and-forth trying to schedule meetings?
+                    Learn how to write a Python script that accesses calendars, finds
+                    common availability among participants, and automatically books
+                    meeting rooms and sends out invites.</dd>
+                <dt>Streamlining Data Reports from Multiple Sources</dt>
+                <dd>
+                    Eliminate the hassle of manually compiling reports. Discover how to
+                    use Python to automatically gather data from various sources like
+                    sales platforms, databases, and Excel files, and consolidate them
+                    into comprehensive, easy-to-read reports.</dd>
+                <dt>Enhanced Market Research with Web Scraping</dt>
+                <dd>
+                    Stay ahead of the competition by automating your market research. Learn
+                    to use Python for web scraping to extract and analyze competitor data,
+                    customer reviews, and market trends from various online sources.
+                </dd>
+                <dt>Personalized Customer Service Automation</dt>
+                <dd>
+                    Improve your customer service efficiency. Use Python to automate
+                    responses to frequently asked customer queries, freeing up time to focus
+                    on more complex customer interactions.
+                </dd>
+            </dl>
+            <img src="SupplyChain.jpg" alt="An dashing young man finding the shortest path with a Python">
+            <dl>
+                <dt>Custom Analytics Tools for Niche Data</dt><dd> Create custom
+                    analytics tools tailored to your industry’s specific needs. Whether
+                    it’s analyzing real estate markets, health data, or educational
+                    metrics, Python gives you the flexibility to build tools that handle
+                    niche data effectively.
+                </dd>
+                <dt>Optimizing Supply Chain Logistics</dt>
+                <dd>
+                    Reduce overhead costs by optimizing your supply chain. With Python,
+                    learn to analyze logistics data to find the most efficient routes,
+                    manage inventory levels effectively, and predict future demand to
+                    avoid overstocking or stockouts. Monitor prices to automatically
+                    enjoy good deals when they present themselves.
+                </dd>
+                <dt>Efficient Resource Allocation in Project Management</dt>
+                <dd>
+                    Optimize resource allocation in projects. Learn Python techniques to
+                    analyze project data, predict resource needs, and ensure optimal use
+                    of manpower and materials.
+                </dd>
+            </dl>
+        </section>
+    </section>
+    <section class="post-hero" id="bio">
+        <h2 id="bio">Bio</h2>
+        <section class="sidebyside">
+            <img src="Talk.jpg" alt="I talk">
+            <img src="matronche.jpg" alt="Ma bobine" class="right">
+            <p>Edouard Klein, a distinguished data scientist and AI expert, has been
+                at the forefront of technological innovation and education since 2010.
+                With a PhD in Computer Science, Edouard has made significant strides in
+                AI, developing new algorithms and contributing to international
+                conferences like ECML and NeurIPS. His work transcends academic
+                research, marked by practical application and teaching roles at
+                prestigious institutions like Supélec, ESSEC, la Sorbonne, and other
+                lesser-known schools.</p>
+            <p>In the realm of engineering, Edouard&apos;s background in electronics and
+                his expertise in statistical learning, data science, and AI are
+                unparalleled. His tenure as the head of research and development for the
+                national cybercrime unit of the French Gendarmerie Nationale exemplifies
+                his ability to blend theoretical knowledge with real-world applications,
+                a skill crucial in teaching Python effectively.</p>
+            <p>His journey is not just about technical proficiency; it&apos;s about
+                applying these skills to solve complex problems. From implementing
+                advanced statistical models for crime prediction to dismantling a
+                money-laundering ring using graph theory, Edouard&apos;s experiences bring a
+                rich, practical perspective to his teaching. Join him in exploring
+                Python&apos;s versatility and empower yourself to make data-driven decisions
+                in your professional life.</p>
+        </section>
+    </section>
+    <section class="post-hero">
+        <h2 id="testimonials">Testimonials</h2>
+        <p>Here are some excerpts from the anonymous student feedback from the Essec business school:</p>
+        <dl>
+            <dt>Engaging and Effective Teaching</dt>
+            <dd>
+                <ul>
+                    <li>"Very good teacher. Knew how to get me interested in coding."</li>
+                    <li>"The teacher really seemed he knew what he was talking about."</li>
+                    <li>"I appreciated the enthusiasm of the professor."</li>
+                    <li>"He is also passionate about what he teaches and seems to take
+                        pleasure in sharing it, which is very stimulating as a student."</li>
+            </ul></dd>
+            <dt>Attentive and Responsive Instructor</dt>
+            <dd>
+                <ul>
+                    <li>"The teacher was available and attentive to
+                        students/participants."</li>
+                    <li>"Very attentive to the students and paid a lot of attention to our
+                        concerns and questions."</li>
+                    <li>"Our teacher was very attentive to our questions, did not hesitate
+                        to repeat the same answers several times so that everyone understood
+                        well"</li>
+                    <li>"I also appreciated the patience of our teacher, who was able to
+                        adapt to the fact that some students […] had not done mathematics since
+                        high school".</li>
+            </ul></dd>
+            <dt>Practical Learning Experience</dt>
+            <dd>
+                <ul>
+                    <li>"I have really appreciated to learn quickly to use python in this
+                        class and to have learnt to look on the internet to resolve
+                        problems."</li>
+                    <li>"The requirement to submit cases every day to push us to review the
+                        day&apos;s learning seems to me to be an excellent method."</li>
+            </ul></dd>
+            <dt>Challenging and Rewarding</dt>
+            <dd>
+                <ul>
+                    <li>"The course was really intense. I&apos;ve learned many things and I&apos;m
+                        grateful for that."</li>
+                    <li>"Really challenging course - Insightful knowledge about programming
+                        in Python."</li>
+                    <li>"The assessment methods are original and pretty well done."</li>
+            </ul></dd>
+        </dl>
+    </section>
+    <section class="post-hero">
+        <h2 id="pricing">Pricing</h2>
+        <form action="/forms/enroll" method="post">
+            <table id="price">
+                <thead>
+                    <tr>
+                        <th colspan=5>Base price:</th>
+                        <th>1900€</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="radio" id="january" name="session" value="january" disabled></td>
+                        <td><label for="january">January 29 - February 2 2024</label></td>
+                        <td>Europe/Paris</td>
+                        <td>French</td>
+                        <td colspan=2>FULLY BOOKED</td>
+                    </tr>
+                    <tr class="even">
+                        <td><input type="radio" id="february" name="session" value="february" disabled></td>
+                        <td><label for="february">February 26 - March 1 2024</label></td>
+                        <td>America/New_York</td>
+                        <td>English</td>
+                        <td colspan=2>FULLY BOOKED</td>
+                    </tr>
+                    <tr>
+                        <td><input type="radio" id="march" name="session" value="march"></td>
+                        <td><label for="march">March 11 - March 14 2024</label></td>
+                        <td>Europe/Paris</td>
+                        <td>English</td>
+                        <td class="discount"><!-- MARCH_SEATS_LEFT -->4 seats left</td>
+                    </tr>
+                    <tr class="even">
+                        <td><input type="radio" id="april" name="session" value="april"></td>
+                        <td><label for="april">April 22 - April 26 2024</label></td>
+                        <td>Europe/Paris</td>
+                        <td>English</td>
+                        <td><!-- APRIL_SEATS_LEFT -->10 seats left</td>
+                        <td class="discount">- 10% Early birds</td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td colspan=3><label for="referrer_email">I have been referred to the course by: </label></td>
+                        <td><input type="email" name="referrer_email" placeholder="Referrer's email"></td>
+                        <td class="discount">-10% referral bonus</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="community_boost"></td>
+                        <td colspan=4><label for="community_boost">I think, as a member of an
+                                underserved community (woman, poor, immigrant, dyslexic, etc.), that
+                                a 20% discount would help me compensate for the odds stacked against
+                                me by society. If I select this item, the discount is automatically
+                                applied, no questions asked.</label></td>
+                        <td class="discount">-20% community discount</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan=5>Fully discounted price:</th>
+                        <th>1140 €</th>
+                    </tr>
+                    <tr>
+                        <td colspan=5></td>
+                        <td><button class="button enrollCTA" type="submit">Book the course</button></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </form>
+    </section>
+    <section class="post-hero">
+        <h2 id="pricing">Team Pricing</h2>
+        <p>You can book a private session for your whole team, advantages include:</p>
+        <ul>
+            <li>Private server to upload your business-sensitive data.</li>
+            <li>Possibility of an on-premises installation of said server.</li>
+            <li>The participant's personal projects are tailored to your business needs, and deal with your actual data.</li>
+            <li>Possibility of signing an NDA. Your instructor works with medical doctors and has been involved in numerous court cases, he knows how to keep a secret, and can train your employees to do the same.</li>
+            <li>Possibility to adapt the schedule around your needs.</li>
+            <li>Save up to 50% compared to the individual offer: prices start at 9500 € and go up depending on your requested arrangements.</li>
+        </ul>
+        <p>Shoot an email to hands-on-python -at- beaver-labs -dot- com and get a quote !</p>
+    </section>
+    <section class="post-hero">
+        <h2 id="email">Mailing-list</h2>
+        <form action="/subscribe" method="post">
+            <label for="subscriber_email">Enter your email to subscribe to our mailing list:</label>
+            <input type="email" name="subscriber_email" placeholder="toto@example.com" />
+            <button class="button emailCTA" type="submit">subscribe</button>
+        </form>
+        <ul>
+            <li>We will send:</li>
+            <ul>
+                <li>a notification when a new session opens,</li>
+                <li>links to free Python learning resources as we publish them,</li>
+                <li>a single notification when a topic-adjacent course opens (e.g. statistical modeling for M.D.).</li>
+            </ul>
+            <li>All our emails are in plain text (no hidden trackers, all links are explicit).</li>
+            <li>We will never sell, or rent our emails list.</li>
+            <li>The emails are sent from an address you can reply to, and your replies will be read.</li>
+            <li>You can unsubscribe by sending an email saying "unsubscribe".</li>
+            <li>All our emails' subjects start with [Hands-on-Python], so you can easily filter them.</li>
+        </ul>
+    </section>
+    <section class="post-hero">
+        <h2 id="ooo">Book a free 15 minutes 1-on-1 session</h2>
+        <ul>
+            <li>Unsure if the course is right for you ?</li>
+            <li>You have a quick question that is not answered on this webpage ?</li>
+            <li>You want to talk about your personal Python project ?</li>
+            <li>You have special needs that you need to be sure are accomodated before you can book ?</li>
+        </ul>
+        <p>
+            <span class="emph">Book a free 15 minutes 1-on-1 session with your
+            future instructor !</span> I will answer all your questions, point
+            you to the relevant resources, and help you kickstart your
+            transition into the wonderful world of computer programming. No
+            strings attached.
+        </p>
+        <form action="/ooo" method="post">
+            <p>
+                <label for="subscriber_email">Enter your email so that I can send you the video-conferencing link:</label>
+                <input type="email" name="subscriber_email" placeholder="toto@example.com" />
+            </p>
+            <ul>
+            <li><input type="radio" id="date1" name="date" value="date1"><label for="date1">Monday February 26, 10:00, Europe/Paris</label></li>
+            <li><input type="radio" id="date2" name="date" value="date2"><label for="date1">Monday February 26, 15:00, Europe/Paris</label></li>
+            <li><input type="radio" id="date3" name="date" value="date3"><label for="date1">Friday March 1st, 10:00, Europe/Paris</label></li>
+            <li><input type="radio" id="date4" name="date" value="date4"><label for="date1">Friday March 1st, 15:00, Europe/Paris</label></li>
+            <li><input type="radio" id="date5" name="date" value="date5"><label for="date1">Thursday March 7, 10:00, Europe/Paris</label></li>
+            <li><input type="radio" id="date6" name="date" value="date6"><label for="date1">Thursday March 7, 15:00, Europe/Paris</label></li>
+            <li><input type="radio" id="date7" name="date" value="date7"><label for="date1">Monday March 18, 10:00, Europe/Paris</label></li>
+            <li><input type="radio" id="date8" name="date" value="date8"><label for="date1">Monday March 18, 15:00, Europe/Paris</label></li>
+            </ul>
+            <button class="button oooCTA" type="submit">Book your 1-on-1</button>
+        </form>
+        <p>Of course, if no suitable slot is available, you can always send an email to  hands-on-python -at- beaver-labs -dot- com.</p>
+    </section>
+    <section class="post-hero">
+        <h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+        <dl>
+            <dt>What do I need to know to start the course?</dt>
+            <dd>
+
+            </dd>
+        </dl>
+        <p>To get started with our course, you should be comfortable with high
+            school level mathematics and basic computer skills like understanding
+            what windows and files are. No prior programming experience is
+            required.</p>
+        <dl>
+            <dt>Do I really need to free up one week?</dt>
+            <dd>
+
+            </dd>
+        </dl>
+        <p>Yes, it&apos;s essential. Our course is intensive and designed to maximize
+            learning within a week. Clearing your schedule ensures you can fully
+            engage with the content and benefit from the interactive sessions and
+            challenges.</p>
+        <dl>
+            <dt>How does the referral program work?</dt>
+            <dd>
+
+            </dd>
+        </dl>
+        <p>If you&apos;re referred by someone, enter their email in the "referred by"
+            field on the signup form. You&apos;ll receive a 10% discount, and the person
+            who referred you gets 10% of their payment back post-course. To refer
+            someone, sign up and make sure they use your email address when they
+            sign up. They save 10%, and you&apos;ll be refunded 10% of your fee after the
+            course concludes.</p>
+        <dl>
+            <dt>Can we get a group discount?</dt>
+            <dd>
+
+            </dd>
+        </dl>
+        <p>Absolutely! For group bookings, contact us at hands-on-python -at- beaver-labs -dot- com. We
+            offer discounts for enrolling together in a public session or can
+            arrange a private session tailored to your group&apos;s needs. We&apos;re also
+            open to signing NDAs and customizing the course content for an
+            additional fee.</p>
+        <dl>
+            <dt>Do we get a certificate?</dt>
+            <dd>
+
+            </dd>
+        </dl>
+        <p>While we don&apos;t issue certificates, the course is designed for you to
+            build a practical portfolio. This portfolio will showcase your new
+            Python skills and projects, serving as tangible proof of your learning
+            and capabilities.</p>
+        <dl>
+            <dt>What about my timezone?</dt>
+            <dd>
+
+            </dd>
+        </dl>
+        <p>If none of our listed sessions fits your timezone, please reach out
+            to us at  hands-on-python -at- beaver-labs -dot- com. We&apos;re committed to accommodating diverse
+            schedules and can arrange sessions that work within your timeframe.</p>
+        <dl>
+            <dt>What language is the course in?</dt>
+            <dd>
+
+            </dd>
+        </dl>
+        <p>Unless otherwise explicitely specified, the course is conducted in English. You don&apos;t need to be a native
+            speaker to participate; a conversational grasp of English is sufficient
+            to follow the course material and engage in the sessions.</p>
+    </section>
+        <section class="post-hero">
+            <h2 id="email">Legal bullshit</h2>
+            <p>We value your privacy and online safety. Our website is free from
+                cookies, javascript, or any form of client-side tracking,
+                ensuring your browsing experience remains private and secure.
+                However our payment processor, to which you will be taken when
+                you book the course, uses many form of tracking to prevent
+                fraud. You may contact us at hands-on-python -at- beaver-labs
+                -dot- com in order to discuss other payment options.</p>
+            <p>The EU gives you a right to access the data we have on you, but
+            because we don't collect any data on you (shocking, in this day and
+            age), this point is kinda moot. If you gave us your email address
+            and want us to forget about it, reply to one of our email and tell
+            us so.</p>
+            <p>This website and the course it proposes are operated by SASU
+            Beaver Labs, a one-person company incorporated in Paris, France. Its
+            registration number is 837 810 100 00029, its official business
+            address is 72 rue Hermel 75018 Paris.</p>
+            <p>Because this course is sold online, it is mandatory to provide a link to the Online Dispute Resolution EU platform:
+                <a href="https://ec.europa.eu/consumers/odr/main/index.cfm">https://ec.europa.eu/consumers/odr/main/index.cfm</a></p>
+            <p>Terms and conditions: all purchases are final. If you can't
+            attend the course after you booked it, we will try to work with you
+            by e.g. rescheduling you to a later session, but this will be a
+            "best-effort" commitment, and not a legally binding guarantee.</p>
+            <p>Legally speaking, we are entitled to keep all your money, and
+            provide the course and the agreed-upon date. However, we rely on
+            word-of-mouth and reputation to sell this course, so we will do our
+            best to find a solution agreeable to both parties.</p>
+            <p>If your reason for not attending is valid, it is highly likely
+            that your credit card has a built-in insurance that can kick in. We
+            advise you to use the best card you have to make your purchase.
+            Please verify the terms and conditions with your card provider.</p>
+            <p>If we are unable to provide the full course at the agreed-upon
+            date we will, at your convenience, either reimburse you in full or
+            book you on a later session.</p>
+            <p>This page and all its assets are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></p>
+        </section>
+</body>
+</html>
