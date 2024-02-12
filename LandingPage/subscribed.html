@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscribed to Hands-on Python</title>
+    <style>
+
+
+
+
+        h1 {
+        color:  #e2975d;
+        font-size: 10vh;
+        text-shadow: 2px 2px 0 rgba(0, 0, 0, .75), 0 0 2px rgba(0, 0, 0, 1);
+        margin:0;
+        }
+
+        #buttons {
+        display: flex;
+        flex-direction:     row;
+        justify-content:    space-around;
+}
+
+        #buttons a {
+        max-width: 20vw;
+        }
+
+        .enrollCTA {
+        background: linear-gradient(to bottom, #e2975d, #e2ba5d);
+        border: 2px solid #e2ba5d;
+        }
+
+
+        #buttons .button{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        }
+        .button {
+        color: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-size: 2vh;
+        font-weight: bold;
+        text-align:center;
+        cursor: pointer;
+        transition: all ease-in-out 0.1s;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+        }
+
+        .button:hover {
+        transform: scale(1.05);
+        }
+
+        button:active {
+        transform: scale(1);
+        }
+
+        .post-hero {
+        width: 80vw;
+        margin:auto;
+        }
+</style>
+</head>
+<body>
+    <section class="post-hero">
+        <h1>Subscription Confirmed</h1>
+        <section>
+          <p>Thank you for subscribing to our mailing list. You are now signed up to receive updates from the "Hands-on Python: From Data to Business Decisions with Python" course.</p>
+          <p>Look out for an email from us in the next few days. It will include information about our upcoming sessions and resources related to the course.</p>
+          <p>We are looking forward to helping you enhance your Python skills.</p>
+        </section>
+        <section id="buttons">
+            <a class="button enrollCTA" href="/">Back to the main page</a>
+        </section>
+    </section>
+</body>
+</html>

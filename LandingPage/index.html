@@ -595,7 +595,7 @@
     </section>
     <section class="post-hero">
         <h2 id="email">Mailing-list</h2>
-        <form action="/subscribe" method="post">
+        <form action="/forms/subscribe" method="post">
             <label for="subscriber_email">Enter your email to subscribe to our mailing list:</label>
             <input type="email" name="subscriber_email" placeholder="toto@example.com" />
             <button class="button emailCTA" type="submit">subscribe</button>
@@ -629,20 +629,20 @@
             transition into the wonderful world of computer programming. No
             strings attached.
         </p>
-        <form action="/ooo" method="post">
+        <form action="/forms/ooo" method="post">
             <p>
                 <label for="subscriber_email">Enter your email so that I can send you the video-conferencing link:</label>
                 <input type="email" name="subscriber_email" placeholder="toto@example.com" />
             </p>
             <ul>
-            <li><input type="radio" id="date1" name="date" value="date1"><label for="date1">Monday February 26, 10:00, Europe/Paris</label></li>
-            <li><input type="radio" id="date2" name="date" value="date2"><label for="date1">Monday February 26, 15:00, Europe/Paris</label></li>
-            <li><input type="radio" id="date3" name="date" value="date3"><label for="date1">Friday March 1st, 10:00, Europe/Paris</label></li>
-            <li><input type="radio" id="date4" name="date" value="date4"><label for="date1">Friday March 1st, 15:00, Europe/Paris</label></li>
-            <li><input type="radio" id="date5" name="date" value="date5"><label for="date1">Thursday March 7, 10:00, Europe/Paris</label></li>
-            <li><input type="radio" id="date6" name="date" value="date6"><label for="date1">Thursday March 7, 15:00, Europe/Paris</label></li>
-            <li><input type="radio" id="date7" name="date" value="date7"><label for="date1">Monday March 18, 10:00, Europe/Paris</label></li>
-            <li><input type="radio" id="date8" name="date" value="date8"><label for="date1">Monday March 18, 15:00, Europe/Paris</label></li>
+            <li><input type="radio" id="date1" name="date" value="20240226T10:00" disabled><label for="date1">Monday February 26, 10:00, Europe/Paris [Already booked]</label></li>
+            <li><input type="radio" id="date2" name="date" value="20240226T15:00"><label for="date1">Monday February 26, 15:00, Europe/Paris</label></li>
+            <li><input type="radio" id="date3" name="date" value="20240301T10:00"><label for="date1">Friday March 1st, 10:00, Europe/Paris</label></li>
+            <li><input type="radio" id="date4" name="date" value="20240301T15:00"><label for="date1">Friday March 1st, 15:00, Europe/Paris</label></li>
+            <li><input type="radio" id="date5" name="date" value="20240307T10:00"><label for="date1">Thursday March 7, 10:00, Europe/Paris</label></li>
+            <li><input type="radio" id="date6" name="date" value="20240307T15:00"><label for="date1">Thursday March 7, 15:00, Europe/Paris</label></li>
+            <li><input type="radio" id="date7" name="date" value="20240318T10:00"><label for="date1">Monday March 18, 10:00, Europe/Paris</label></li>
+            <li><input type="radio" id="date8" name="date" value="20240318T15:00"><label for="date1">Monday March 18, 15:00, Europe/Paris</label></li>
             </ul>
             <button class="button oooCTA" type="submit">Book your 1-on-1</button>
         </form>
