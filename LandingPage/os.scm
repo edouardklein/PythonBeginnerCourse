@@ -1,6 +1,10 @@
 (use-modules
+ (guix gexp)
  (beaver system)
+ (beaver functional-services)
+ (gnu services shepherd)
  (gnu packages python)
+ (gnu packages bash)
  (gnu packages python-web))
 
 (->
@@ -15,7 +19,22 @@
                                       "}"))
  ;; os/mkdir-p /var/lib/handsonpython
  (packages python python-flask)
- (os/shepherd-service
-  "FLASK_ENV=development FLASK_DEBUG=1 FLASK_APP=/var/lib/handsonpython/backend.py  flask run --reload --debugger --host=0.0.0.0 --port=5000"
-  "/var/lib/handsonpython")
+ (extend-service
+  shepherd-root
+  (list (shepherd-service
+         (documentation (string-append "Run the handsonpython website forms"))
+         (requirement '(user-homes networking))
+         (provision (list 'handsonpython))
+         (start #~(make-forkexec-constructor
+                   (list #$(file-append
+                            bash
+                            "/bin/bash") "-c"
+                            "FLASK_ENV=development FLASK_DEBUG=1 FLASK_APP=/home/edouard/src/PythonBeginnerCourse/LandingPage/backend.py  flask run --reload --debugger --host=0.0.0.0 --port=5000")
+                    #:user "edouard"
+                    #:group "edouard"
+                    #:directory "/var/lib/handsonpython"
+                    #:log-file "/var/log/handsonpython.log"
+
+                   ))
+            (stop #~(make-kill-destructor)))))
  )

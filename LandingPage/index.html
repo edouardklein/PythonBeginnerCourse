@@ -5,178 +5,254 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hands-on Python: From Data to Business Decisions with Python</title>
     <style>
-
-
-
-        body{
-        max-width: 1693px;
-        margin: auto;
-         font-size: 2.3vh;
+        /*Ratio dependent, from wider to narrower */
+        @media screen and (min-aspect-ratio: 1.5/1) {
+            body{
+                max-width: 1693px;
+                margin: auto;
+                font-size: 2.3vh;
+            }
+            #hero {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                height: 100vh;
+            }
+            #hero-content {
+                display: flex;
+                align-items: flex-end;  /* Needed to avoid girl image stretching */
+                max-width: 82%;
+            }
+            #hero-content img {
+                max-height: 60vh;
+            }
+            #hero-left-column{
+                display: flex;
+                flex-direction: column;
+                justify-content: safe flex-end;
+                height: 100%;
+            }
+            h1 {
+                font-size: 10vh;
+            }
+            h2 {
+                font-size: 5vh;
+            }
+            th, td {
+                padding: 10px;
+                text-align: left;
+            }
+            .rh {
+                border-right: 1px solid #04527f;
+            }
         }
+        @media screen and (min-aspect-ratio: 2.1/1) {
+            #hero-content {
+                font-size: 3vh;
+            }
+        }
+        @media screen and (max-aspect-ratio: 2.1/1) and (min-aspect-ratio: 1.8/1) {
+            #hero-content {
+                font-size: 2.7vh;
+            }
+        }
+        @media screen and (max-aspect-ratio: 1.8/1) and (min-aspect-ratio: 1.5/1) {
+            #hero-content {
+                font-size: 2.3vh;
+            }
+        }
+        /*Mobile*/
+        @media screen and (max-aspect-ratio: 1.5/1) {
+            #hero-content {
+            background-color:  #fff7cc;
+            }
+            #hero-content img {
+                display:none;
+            }
+            h1 {
+                font-size: 6vh;
+            }
+            h2 {
+                font-size: 4vh;
+            }
+            table, thead, tbody, th, td, tr, tfoot {
+                display: block;
+            }
+            table thead tr {
+                display: none;
+            }
+            #price, #price * {
+                display: revert;
+            }
+            #price td {
+                padding: 3px;
+            }
+            tbody tr {
+                margin-bottom: 1rem;
+            }
 
+            table:not(#price) td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+            table:not(#price) td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                width: calc(50% - 20px);
+                text-align: left;
+                font-weight: bold;
+            }
+            .morning td:nth-child(odd) {
+                background-color: #b2d8ff;
+            }
+            .morning td:nth-child(even) {
+                background-color: #d0e7ff;
+            }
+            .afternoon td:nth-child(odd) {
+                background-color: #ffecdd;
+            }
+            .afternoon td:nth-child(even) {
+                background-color:#fff6d5;
+            }
+            .rh {
+                border-right: none;
+            }
+
+            .morning, .afternoon, .even, .afterning {
+                background-color: transparent;
+            }
+        }
         #hero {
-        background-color: #f6fdff;
-        background-image: url('HeroSection.jpg') ;
-        background-size:    cover;
-        background-repeat:  no-repeat;
-        background-position:    right;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100vh;
+            background-color: #f6fdff;
+            background-image: url('HeroSection.jpg') ;
+            background-size:    cover;
+            background-repeat:  no-repeat;
+            background-position:    right;
         }
-
         h1 {
-        color:  #e2975d;
-        font-size: 10vh;
-        text-shadow: 2px 2px 0 rgba(0, 0, 0, .75), 0 0 2px rgba(0, 0, 0, 1);
-        margin:0;
+            color:  #e2975d;
+            text-shadow: 2px 2px 0 rgba(0, 0, 0, .75), 0 0 2px rgba(0, 0, 0, 1);
+            margin:0;
         }
-
         h2 {
-        color:  #e2975d;
-        font-size: 5vh;
-        text-shadow: 1px 1px 0 rgba(0, 0, 0, .75), 0 0 1px rgba(0, 0, 0, 1);
+            color:  #e2975d;
+            text-shadow: 1px 1px 0 rgba(0, 0, 0, .75), 0 0 1px rgba(0, 0, 0, 1);
         }
-
         #buttons {
-        display: flex;
-        flex-direction:     row;
-        justify-content:    space-around;
-}
-
+            display: flex;
+            flex-direction:     row;
+            justify-content:    space-around;
+        }
         #buttons a {
-        max-width: 20vw;
+            max-width: 20vw;
         }
-
         .emailCTA, .oooCTA {
-        background: linear-gradient(to bottom, #61969d, #61b99d);
-        border: 2px solid #61b99d;
+            background: linear-gradient(to bottom, #61969d, #61b99d);
+            border: 2px solid #61b99d;
         }
-
         .enrollCTA {
-        background: linear-gradient(to bottom, #e2975d, #e2ba5d);
-        border: 2px solid #e2ba5d;
-        }
-
-        #hero-content {
-        display: flex;
-        font-size: 3vh;
-        align-items: flex-end;  /* Needed to avoid girl image stretching */
-        max-width: 82%;
-        }
-#hero-content img {
-        max-height: 60vh;
-}
-        #hero-left-column{
-        display: flex;
-        flex-direction: column;
-        justify-content: safe flex-end;
-        height: 100%;
+            background: linear-gradient(to bottom, #e2975d, #e2ba5d);
+            border: 2px solid #e2ba5d;
         }
         .emph {
-        font-weight: bold;
-        color: #63352d;
-        font-size: larger;
-        /*   text-shadow: 1px 1px 0 rgba(0, 0, 0, .75), 0 0 1px rgba(0, 0, 0, 1);*/
-
+            font-weight: bold;
+            color: #63352d;
+            font-size: larger;
+            text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
         }
 
         #buttons .button{
-        display: flex;
-        justify-content: center;
-        align-items: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .button {
-        color: white;
-        padding: 10px 20px;
-        border-radius: 10px;
-        font-size: 2vh;
-        font-weight: bold;
-        text-align:center;
-        cursor: pointer;
-        transition: all ease-in-out 0.1s;
-        box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 2vh;
+            font-weight: bold;
+            text-align:center;
+            cursor: pointer;
+            transition: all ease-in-out 0.1s;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.16);
         }
 
         .button:hover {
-        transform: scale(1.05);
+            transform: scale(1.05);
         }
 
         button:active {
-        transform: scale(1);
+            transform: scale(1);
         }
 
         html {
-        scroll-behavior: smooth;
+            scroll-behavior: smooth;
         }
 
         table {
-        width: 100%;
-        border-collapse: collapse;
+            width: 100%;
+            border-collapse: collapse;
         }
         th, td {
-        padding: 10px;
-        text-align: left;
-                font-size: 2.5vh;
+            font-size: 2.5vh;
         }
         th{
-        border-bottom: 1px solid #04527f;
-        background-color:  #fff7cc;
+            border-bottom: 1px solid #04527f;
+            background-color:  #fff7cc;
         }
         tfoot th {
             border-bottom: 0;
             border-top: 1px solid #04527f;
         }
-.rh {
-        border-right: 1px solid #04527f;
-}
         th, .rh, dt {
-        color: #04527f;
-        font-size: 3vh;
+            color: #04527f;
+            font-size: 3vh;
         }
 
         .morning {
-        background-color: #b2d8ff;
+            background-color: #b2d8ff;
         }
 
         .afternoon, .even {
-        background-color: #ffecdd;
+            background-color: #ffecdd;
         }
 
         .afterning {
-        background-color:  #fff7cc;
+            background-color:  #fff7cc;
         }
 
         .post-hero {
-        width: 80vw;
-        margin:auto;
+            width: 80vw;
+            margin:auto;
         }
 
-.sidebyside img {
-        max-width: 20vw;
-        float: left;
-        margin-right: 3vw;
-}
-.sidebyside img.right {
-        float:right;
-        margin-left:3vw;
-        margin-right:0;
+        .sidebyside img {
+            max-width: 20vw;
+            float: left;
+            margin-right: 3vw;
+        }
+        .sidebyside img.right {
+            float:right;
+            margin-left:3vw;
+            margin-right:0;
         }
 
-#bio img {
-        max-width: 10vw;}
-.post-hero::after { /*"clearfix": prevent floats to float past the section end,
+        #bio img {
+            max-width: 10vw;}
+        .post-hero::after { /*"clearfix": prevent floats to float past the section end,
         see https://stackoverflow.com/questions/211383/what-methods-of-clearfix-can-i-use*/
-         content: "";
-  display: block;
-  clear: both;
-}
-
-#price th {
-        text-align:right;
+            content: "";
+            display: block;
+            clear: both;
         }
-                                                                                                                                                                                                                                                                                                                                                                                                 </style>
+
+        #price th {
+            text-align:right;
+        }
+    </style>
 </head>
 <body>
     <section id="hero">
@@ -225,32 +301,32 @@
             <tbody>
                 <tr class="morning">
                     <td class="rh">AM (9 to 12)</td>
-                    <td>Learn what is Python and how to run Python code<br/>
+                    <td data-label="Monday, intro: ">Learn what is Python and how to run Python code<br/>
                         Discover the basics of Python syntax</td>
-                    <td>Bird&apos;s eye view of Python&apos;s ecosystem<br/>
+                    <td data-label="Tuesday: getting help: ">Bird&apos;s eye view of Python&apos;s ecosystem<br/>
                      Learn how to find help and unstuck yourself</td>
-                    <td>Learn data analysis and visualization<br/>
+                    <td data-label="Wednesday: data analysys: ">Learn data analysis and visualization<br/>
                      Juuust a little bit of statistics</td>
-                    <td>Learn how to scrape, import and export data,<br/>
+                    <td data-label="Thursday, data import and export: ">Learn how to scrape, import and export data,<br/>
                      Use Python to create web apps and APIs.</td>
-                    <td>Learn how to optimize business problems<br/>
+                    <td data-label="Friday, constraint optimization">Learn how to optimize business problems<br/>
                      and allocate resources efficiently</td>
                 </tr>
                 <tr class="afternoon">
                     <td class="rh">PM</td>
-                    <td>Challenges 1 &amp; 2<br/>
+                    <td data-label="Monday">Challenges 1 &amp; 2<br/>
                     office hours &amp; 1-on-1 sessions<br/>
                     optional challenges for the best students</td>
-                    <td>Challenges 3&amp;4<br/>
+                    <td data-label="Tuesday">Challenges 3&amp;4<br/>
                     office hours &amp; 1-on-1 sessions<br/>
                     optional challenges for the best students</td>
-                    <td>Challenge 5<br/>
+                    <td data-label="Wednesday">Challenge 5<br/>
                     office hours &amp; 1-on-1 sessions<br/>
                     Start of personalized project</td>
-                    <td>Challenge 6<br/>
+                    <td data-label="Thursday">Challenge 6<br/>
                     office hours &amp; 1-on-1 sessions<br/>
                     End of personalized project</td>
-                    <td>Challenge 7<br/>
+                    <td data-label="Friday">Challenge 7<br/>
                     office hours &amp; 1-on-1 sessions<br/>
                     optional projects presentation</td>
                 </tr>
@@ -317,7 +393,7 @@
                 Experience a dynamic learning
                 environment with our innovative mixed media course material. This
                 includes engaging slides, an Anki deck for spaced repetition learning,
-                practical Jupyter notebooks, andaccess to a shared Jupyter server,
+                practical Jupyter notebooks, and access to a shared Jupyter server,
                 ensuring a hands-on experience. We also provide curated links to
                 beginner-friendly resources, guiding you every step of the way. This
                 rich blend of materials caters to different learning styles and enhances
@@ -522,32 +598,32 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><input type="radio" id="january" name="session" value="january" disabled></td>
-                        <td><label for="january">January 29 - February 2 2024</label></td>
-                        <td>Europe/Paris</td>
-                        <td>French</td>
-                        <td colspan=2>FULLY BOOKED</td>
+                        <td></td>
+                        <td>Dates</td>
+                        <td>Timezone</td>
+                        <td>Language</td>
+                        <td class="discount"></td>
                     </tr>
                     <tr class="even">
-                        <td><input type="radio" id="february" name="session" value="february" disabled></td>
-                        <td><label for="february">February 26 - March 1 2024</label></td>
+                        <td><input type="radio" id="may" name="session" value="may" disabled></td>
+                        <td><label for="may">May 27 - 31 2024</label></td>
                         <td>America/New_York</td>
                         <td>English</td>
                         <td colspan=2>FULLY BOOKED</td>
                     </tr>
                     <tr>
-                        <td><input type="radio" id="march" name="session" value="march"></td>
-                        <td><label for="march">March 11 - March 14 2024</label></td>
+                        <td><input type="radio" id="june" name="session" value="june"></td>
+                        <td><label for="june">June 24 - 28 2024</label></td>
                         <td>Europe/Paris</td>
                         <td>English</td>
-                        <td class="discount"><!-- MARCH_SEATS_LEFT -->4 seats left</td>
+                        <td class="discount"><!-- JUNE_SEATS_LEFT -->4 seats left</td>
                     </tr>
                     <tr class="even">
-                        <td><input type="radio" id="april" name="session" value="april"></td>
-                        <td><label for="april">April 22 - April 26 2024</label></td>
+                        <td><input type="radio" id="july" name="session" value="july"></td>
+                        <td><label for="july">July 8 - 12 2024</label></td>
                         <td>Europe/Paris</td>
                         <td>English</td>
-                        <td><!-- APRIL_SEATS_LEFT -->10 seats left</td>
+                        <td><!-- JULY_SEATS_LEFT -->10 seats left</td>
                         <td class="discount">- 10% Early birds</td>
                     </tr>
 
@@ -635,14 +711,14 @@
                 <input type="email" name="subscriber_email" placeholder="toto@example.com" />
             </p>
             <ul>
-            <li><input type="radio" id="date1" name="date" value="20240226T10:00" disabled><label for="date1">Monday February 26, 10:00, Europe/Paris [Already booked]</label></li>
-            <li><input type="radio" id="date2" name="date" value="20240226T15:00"><label for="date1">Monday February 26, 15:00, Europe/Paris</label></li>
-            <li><input type="radio" id="date3" name="date" value="20240301T10:00"><label for="date1">Friday March 1st, 10:00, Europe/Paris</label></li>
-            <li><input type="radio" id="date4" name="date" value="20240301T15:00"><label for="date1">Friday March 1st, 15:00, Europe/Paris</label></li>
-            <li><input type="radio" id="date5" name="date" value="20240307T10:00"><label for="date1">Thursday March 7, 10:00, Europe/Paris</label></li>
-            <li><input type="radio" id="date6" name="date" value="20240307T15:00"><label for="date1">Thursday March 7, 15:00, Europe/Paris</label></li>
-            <li><input type="radio" id="date7" name="date" value="20240318T10:00"><label for="date1">Monday March 18, 10:00, Europe/Paris</label></li>
-            <li><input type="radio" id="date8" name="date" value="20240318T15:00"><label for="date1">Monday March 18, 15:00, Europe/Paris</label></li>
+                <li><input type="radio" id="date1" name="date" value="20240521T10:00" disabled><label for="date1">Tuesday May 21, 10:00, Europe/Paris [Already booked]</label></li>
+                <li><input type="radio" id="date2" name="date" value="20240521T15:00"><label for="date2">Tuesday May 21, 15:00, Europe/Paris</label></li>
+                <li><input type="radio" id="date3" name="date" value="20240523T10:00"><label for="date3">Thursday May 23, 10:00, Europe/Paris</label></li>
+                <li><input type="radio" id="date4" name="date" value="20240523T15:00"><label for="date4">Thursday May 23, 15:00, Europe/Paris</label></li>
+                <li><input type="radio" id="date5" name="date" value="20240603T10:00"><label for="date5">Monday June 3, 10:00, Europe/Paris</label></li>
+                <li><input type="radio" id="date6" name="date" value="20240603T15:00"><label for="date6">Monday June 3, 15:00, Europe/Paris</label></li>
+                <li><input type="radio" id="date7" name="date" value="20240610T10:00"><label for="date7">Monday June 10, 10:00, Europe/Paris</label></li>
+                <li><input type="radio" id="date8" name="date" value="20240613T15:00"><label for="date8">Thursday June 13, 15:00, Europe/Paris</label></li>
             </ul>
             <button class="button oooCTA" type="submit">Book your 1-on-1</button>
         </form>
