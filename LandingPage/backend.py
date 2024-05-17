@@ -1,4 +1,5 @@
 from flask import Flask, request, redirect, render_template
+import stripe
 from datetime import datetime
 from contextlib import contextmanager
 import fcntl
@@ -35,34 +36,29 @@ def decrease_seats(month):
         f.seek(0)
         f.writelines(new_lines)
 
-@app.route('/forms/payed', methods=['POST'])
-def payed():
-    # - FIXME check stripe's secret
-    # - FIXME use stripe API to detect failure
-    app.logger.info(request.form)
-    if request.form['success'] != 'true':
+@app.route('/forms/payed/<session_id>')
+def payed(session_id):
+    app.logger.info(request)
+    try:
+        checkout_session = stripe.checkout.Session.retrieve(session_id)
+        app.logger.info(checkout_session)
+        customer_email = checkout_session['customer_details']['email']
+        with locked_file("/var/lib/handsonpython/referrers.txt", 'a') as f:
+            f.write(f"{customer_email}\n")
+
+        month = request.args.get('utm_content')
+        assert month in ['june', 'july']
+        decrease_seats(month)
+
+        referrer = request.args.get('utm_medium')
+        if referrer:
+            amount = 42
+            with locked_file("/var/lib/handsonpython/payouts.txt", 'a') as f:
+                f.write(f"{datetime.now().isoformat()},{customer_email},{month},{referrer},{amount}\n")
+        return render_template('payed.html', email=customer_email)
+    except Exception as e:
+        app.logger.warning(e)
         return redirect('../payment_failed.html')
-
-    # - Add payer email to the list of valid referrers
-    # FIXME: use stripe API to get the email
-    email = "toto@example.com"
-    with locked_file("/var/lib/handsonpython/referrers.txt", 'a') as f:
-        f.write(f"{email}\n")
-
-    # Decrease the number of available seats
-    # FIXME: get the session back from stripe, and validate it
-    session = 'march'
-    decrease_seats(session)
-
-    # - add payer to referrer's leaderbord
-    # FIXME: use stripe API to get the referrer and the amount
-    referrer = 'remi@a'
-    amount = 42
-    with locked_file("/var/lib/handsonpython/payouts.txt", 'a') as f:
-        f.write(f"{datetime.now().isoformat()},{email},{session},{referrer},{amount}\n")
-
-    return render_template('payed.html', email=email)
-
 
 
 def valid_referrer(email):
@@ -73,6 +69,13 @@ def valid_referrer(email):
                 return True
     return False
 
+STRIPE_URL = {
+    0:  "https://buy.stripe.com/cN28zxaaKcSj8VO28b",
+    10: "https://buy.stripe.com/8wM2b9ciSaKb1tmdQU",
+    20: "https://buy.stripe.com/5kA8zx3Mm2dF8VO4gl",
+    30: "https://buy.stripe.com/14k8zxgz8bOf0pi006",
+    40: "https://buy.stripe.com/14k4jh4QqaKb9ZS6ov",
+    }
 @app.route('/forms/enroll', methods=['POST'])
 def enroll():
     discount = 0
@@ -90,15 +93,15 @@ def enroll():
 
     if 'session' not in request.form \
        or not request.form['session'] \
-       or request.form['session'] not in ['march', 'april']:
+       or request.form['session'] not in ['june', 'july']:
         return redirect('/enroll_bad_session.html')
-    if request.form['session'] == 'april':
+    if request.form['session'] == 'july':
         discount += 10  # Early bird discount
 
     if 'community_boost' in request.form \
        and request.form['community_boost'] == 'on':
         discount += 20  # Community discount
-    return redirect(f'../stripe{discount}.html?session={request.form["session"]}&referrer={referrer if referrer is not None else "0"}')
+    return redirect(f'{STRIPE_URL[discount]}?utm_content={request.form["session"]}&utm_medium={referrer if referrer is not None else "0"}')
 
 @app.route('/forms/subscribe', methods=['POST'])
 def subscribe():
@@ -134,6 +137,8 @@ def ooo():
        or not request.form["subscriber_email"]:
         return redirect('/ooomissingemail.html')
     if 'date' not in request.form:
+        with locked_file("/var/lib/handsonpython/ooo.txt", 'a') as f:
+            f.write(f"did not select a date, {request.form['subscriber_email']} \n")
         return redirect("../ooomissingdate.html")
     with locked_file("/var/lib/handsonpython/ooo.txt", 'a') as f:
         f.write(f"{request.form['date']}, {request.form['subscriber_email']} \n")
