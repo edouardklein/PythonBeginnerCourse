@@ -252,6 +252,24 @@
         #price th {
             text-align:right;
         }
+        .snippets {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            list-style: none;
+            background:#ffecdd;
+        }
+        .snippets li {
+            flex: 1 1 200px; 
+            background:  #fff7cc;
+            padding: 10px;
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -284,6 +302,13 @@
         </section>
     </section>
     <section class="post-hero">
+        <h2>Key points</h2>
+        <ul class="snippets">
+            <li>Morning: lessons with a live intructor who <span class="emph">adapts its pace to you.</span></li>
+            <li>Afternoon: challenges to apply the lessons, and you build <span class="emph">your own project</span>. You can reach out to the instructor at any time.</li>
+            <li><span class="emph">No prerequisite</span> beyond high school mathematics.</li>
+            <li>State-of-the-art course material, including a spaced repetition card deck and interactive notebooks.</li>
+        </ul>
         <h2
             id="daily-course-structure-a-blend-of-interactive-learning-and-personalized-study">Daily
             Course Structure: A Blend of Interactive Learning and Personalized Study</h2>
@@ -545,7 +570,7 @@
         <dl>
             <dt>Engaging and Effective Teaching</dt>
             <dd>
-                <ul>
+                <ul class="snippets">
                     <li>"Very good teacher. Knew how to get me interested in coding."</li>
                     <li>"The teacher really seemed he knew what he was talking about."</li>
                     <li>"I appreciated the enthusiasm of the professor."</li>
@@ -554,7 +579,7 @@
             </ul></dd>
             <dt>Attentive and Responsive Instructor</dt>
             <dd>
-                <ul>
+                <ul class="snippets">
                     <li>"The teacher was available and attentive to
                         students/participants."</li>
                     <li>"Very attentive to the students and paid a lot of attention to our
@@ -568,7 +593,7 @@
             </ul></dd>
             <dt>Practical Learning Experience</dt>
             <dd>
-                <ul>
+                <ul class="snippets">
                     <li>"I have really appreciated to learn quickly to use python in this
                         class and to have learnt to look on the internet to resolve
                         problems."</li>
@@ -577,7 +602,7 @@
             </ul></dd>
             <dt>Challenging and Rewarding</dt>
             <dd>
-                <ul>
+                <ul class="snippets">
                     <li>"The course was really intense. I&apos;ve learned many things and I&apos;m
                         grateful for that."</li>
                     <li>"Really challenging course - Insightful knowledge about programming
